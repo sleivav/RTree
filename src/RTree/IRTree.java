@@ -1,4 +1,7 @@
 package RTree;
 
-public interface IRTree {
+import java.io.Serializable;
+
+public interface IRTree extends Serializable {
+
 }
