@@ -50,7 +50,8 @@ public class MBR {
     }
 
     public boolean intersecc(MBR rect) {
-        boolean interX = (rect.left >= left && rect.left <= right) || ();
-        return
+        boolean interX = (left <= rect.left && rect.left <= right) || (left <= rect.right && rect.right <= right);
+        boolean interY = (bottom <= rect.bottom && rect.bottom <= top) || (bottom <= rect.top && rect.top <= top);
+        return interX && interY;
     }
 }
