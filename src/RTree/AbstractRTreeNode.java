@@ -3,8 +3,8 @@ package RTree;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-abstract class AbstractRTreeNode implements IRTreeNode, Serializable{
-    private ArrayList<IMBR> rectangles;
+abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
+    private ArrayList<MBR> rectangles;
     private ArrayList<Integer> data;
     private ArrayList<Long> children;
     private Long id;
@@ -13,7 +13,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable{
 
     public AbstractRTreeNode(boolean isLeaf) {
         this.id = IdGenerator.nextId();
-        this.rectangles = new ArrayList<IMBR>(M);
+        this.rectangles = new ArrayList<MBR>(M);
         this.data = new ArrayList<Integer>(M);
     }
 
@@ -26,7 +26,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable{
     @Override
     public void add(Long id) {
         IRTreeNode node = this;
-        while(!node.isLeaf()) {
+        while (!node.isLeaf()) {
             double d = node.indexOf(id);
             int i = (int) d; // ??
             if (i == d) {
@@ -101,20 +101,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable{
         return null;
     }
 
-    @Override
-    public void remove(Long id) {
-
-    }
-
-    @Override
-    public void removeFromChild(Long i, Long id) {
-
-    }
-
-    @Override
-    public void removeFromInternalNode(Long i, Long id) {
-
-    }
 
     @Override
     public Long size() {
