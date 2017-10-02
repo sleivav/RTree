@@ -13,7 +13,13 @@ public class MBR {
     }
 
     public MBR(ArrayList<IRTreeNode> nodes) {
-
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        for (IRTreeNode node: nodes) {
+            minX = Math.min(minX, node.getRectangle().left)
+        }
     }
 
     public void update(IRTreeNode node) {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
-    private ArrayList<MBR> rectangles;
+    private MBR rectangle;
     private ArrayList<Integer> data;
     private ArrayList<Long> children;
     private Long id;
@@ -13,7 +13,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     public AbstractRTreeNode(boolean isLeaf) {
         this.id = IdGenerator.nextId();
-        this.rectangles = new ArrayList<MBR>(M);
+        this.rectangle = null;
         this.data = new ArrayList<Integer>(M);
     }
 
@@ -63,6 +63,11 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public void writeToDisk() {
 
+    }
+
+    @Override
+    public MBR getRectangle() {
+        return rectangle;
     }
 
     @Override

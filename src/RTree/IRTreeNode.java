@@ -10,6 +10,7 @@ public interface IRTreeNode {
     void writeToDisk();
     void deleteFromDisk();
 
+    MBR getRectangle();
     IRTreeNode getChild(Long index);
     double indexOf(Long id);
 
