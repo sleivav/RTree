@@ -11,8 +11,8 @@ public interface IRTreeNode {
     void deleteFromDisk();
 
     MBR getRectangle();
-    IRTreeNode getChild(Long index);
-    double indexOf(Long id);
+    IRTreeNode getChild(int index);
+    int indexOf(Long id);
 
     Long getId();
     Long size();
