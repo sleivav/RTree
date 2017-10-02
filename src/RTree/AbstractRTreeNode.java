@@ -1,17 +1,14 @@
 package RTree;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 
 abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private MBR rectangle;
     private ArrayList<Long> children;
     private Long id;
-    private int m;
-    private int M;
+    private final int m = 0;
+    private final int M = 0;
 
     public AbstractRTreeNode(boolean isLeaf) {
         this.id = IdGenerator.nextId();
@@ -52,11 +49,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     }
 
     @Override
-    public IRTreeNode createSibling() {
-        return null;
-    }
-
-    @Override
     public void deleteFromDisk() {
         try {
             File file = new File(RTree.DIR + "r" + id + ".node");
@@ -64,6 +56,18 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    @Override
+    public IRTreeNode readFromDisk(Long id) {
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(RTree.DIR + "r" + id + ".node"));
+            return (AbstractRTreeNode) (in.readObject());
+        } catch (Exception e){
+            e.printStackTrace();
+            System.exit(1);
+            return null;
         }
     }
 
@@ -122,28 +126,21 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public boolean isFull() {
-        return false;
+        return size() == M;
     }
 
     @Override
     public boolean isLeaf() {
-        return false;
+        return children == null;
     }
 
     @Override
     public boolean isMinimal() {
-        return false;
+        return size() > m;
     }
 
-
     @Override
-    public IRTreeNode readFromDisk(Long id) {
-        return null;
-    }
-
-
-    @Override
-    public Long size() {
-        return null;
+    public int size() {
+        return children.size();
     }
 }

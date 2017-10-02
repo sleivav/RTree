@@ -15,7 +15,7 @@ public interface IRTreeNode {
     int indexOf(Long id);
 
     Long getId();
-    Long size();
+    int size();
     boolean isFull();
     boolean isLeaf();
     boolean isMinimal();
