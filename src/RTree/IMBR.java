@@ -1,4 +1,4 @@
 package RTree;
 
-public class IMBR {
+public interface IMBR {
 }
