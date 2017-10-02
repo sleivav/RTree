@@ -37,7 +37,7 @@ public class MBR {
         return newArea - area();
     }
 
-    private double area() {
+    public double area() {
         return (right - left) * (top - bottom);
     }
 
@@ -47,5 +47,10 @@ public class MBR {
 
     public double yDistance(MBR rect) {
         return Math.min(top, rect.top) - Math.max(bottom, rect.bottom);
+    }
+
+    public boolean intersecc(MBR rect) {
+        boolean interX = (rect.left >= left && rect.left <= right) || ();
+        return
     }
 }
