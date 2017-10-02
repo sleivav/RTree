@@ -14,8 +14,5 @@ public interface IRTreeNode {
     boolean isMinimal();
     IRTreeNode split();
     IRTreeNode readFromDisk(Long id);
-    void remove(Long id);
-    void removeFromChild(Long i, Long id);
-    void removeFromInternalNode(Long i, Long id);
     Long size();
 }
