@@ -3,7 +3,7 @@ package RTree;
 import java.util.ArrayList;
 
 public class MBR {
-    double left, right, bottom, top;
+    private double left, bottom, right, top;
 
     public MBR(double left, double bottom, double right, double top) {
         this.left = left;
@@ -13,28 +13,39 @@ public class MBR {
     }
 
     public MBR(ArrayList<IRTreeNode> nodes) {
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
-        for (IRTreeNode node: nodes) {
-            minX = Math.min(minX, node.getRectangle().left)
-        }
+        left = Double.MAX_VALUE;
+        right = Double.MIN_VALUE;
+        bottom = Double.MAX_VALUE;
+        top = Double.MIN_VALUE;
+        nodes.forEach(this::update);
     }
 
     public void update(IRTreeNode node) {
-
+        left = Math.min(left, node.getRectangle().left);
+        right = Math.max(right, node.getRectangle().right);
+        bottom = Math.min(bottom, node.getRectangle().bottom);
+        top = Math.max(top, node.getRectangle().top);
     }
 
     public double calcChange(IRTreeNode node) {
-        double change = 0;
+        double newLeft = Math.min(left, node.getRectangle().left);
+        double newRight = Math.max(right, node.getRectangle().right);
+        double newBottom = Math.min(bottom, node.getRectangle().bottom);
+        double newTop = Math.max(top, node.getRectangle().top);
 
-        return change;
+        double newArea = (newRight - newLeft) * (newTop - newBottom);
+        return newArea - area();
     }
 
-    public double distance(MBR rectangle, int dimension) {
-        double dist = 0;
+    private double area() {
+        return (right - left) * (top - bottom);
+    }
 
-        return dist;
+    public double xDistance(MBR rect) {
+        return Math.min(right, rect.right) - Math.max(left, rect.left);
+    }
+
+    public double yDistance(MBR rect) {
+        return Math.min(top, rect.top) - Math.max(bottom, rect.bottom);
     }
 }
