@@ -21,30 +21,18 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
 
         for (int i = 0; i < size(); i++) {
             MBR rekt = this.getChild(i).getRectangle();
-            if (rekt.getLeft() > maxLeft) {
-                maxLeft = rekt.getLeft();
-            }
-            if (rekt.getLeft() < minLeft) {
-                minLeft = rekt.getLeft();
-            }
-            if (rekt.getBottom() > maxBottom) {
-                maxBottom = rekt.getBottom();
-            }
-            if (rekt.getBottom() < minBottom) {
-                minBottom = rekt.getBottom();
-            }
-            if (rekt.getRight() < minRight) {
-                minRight = rekt.getRight();
-            }
-            if (rekt.getRight() > maxRight) {
-                maxRight = rekt.getRight();
-            }
-            if (rekt.getTop() < minTop) {
-                minTop = rekt.getTop();
-            }
-            if (rekt.getTop() > maxTop) {
-                maxTop = rekt.getTop();
-            }
+
+            minLeft = Math.min(minLeft, rekt.getLeft());
+            maxLeft = Math.max(maxLeft, rekt.getLeft());
+
+            minBottom = Math.min(minBottom, rekt.getBottom());
+            maxBottom = Math.max(maxBottom, rekt.getBottom());
+
+            minRight = Math.min(minRight, rekt.getRight());
+            maxRight = Math.max(maxRight, rekt.getRight());
+
+            minTop = Math.min(minTop, rekt.getTop());
+            maxTop = Math.max(maxTop, rekt.getTop());
         }
 
         double separationX = Math.abs(maxLeft - minRight);
@@ -61,25 +49,17 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
             dimension = 1;
         }
 
-        // TODO ordenar en dimensión y asignar mitad y mitad
-
         ArrayList<Long> children = bubblesort(dimension);
-        ArrayList<Long> children1 = new ArrayList<Long>();
-        ArrayList<Long> children2 = new ArrayList<Long>();
+        IRTreeNode node1 = new GeneesSplitRTreeNode();
+        IRTreeNode node2 = new GeneesSplitRTreeNode();
 
         int mid = children.size() / 2;
         for (int i = 0; i < mid; i++) {
-            children1.add(children.get(i));
-            children2.add(children.get(i + mid));
+            node1.add(children.get(i));
+            node2.add(children.get(i + mid));
         }
         if (children.size() % 2 == 1)
-            children2.add(children.get(2 * mid - 1));
-
-        IRTreeNode node1 = new GeneesSplitRTreeNode();
-        node1.setChildren(children1);
-
-        IRTreeNode node2 = new GeneesSplitRTreeNode();
-        node2.setChildren(children2);
+            node2.add(children.get(2 * mid - 1));
 
         // TODO crear padre
 
@@ -96,13 +76,14 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
 
         // bubblesort best sort
         for (int i = 0; i < size(); i++) {
-            for (int j = i + 1; j < size(); j++) {
+            for (int j = 1; j < size(); j++) {
                 if (lessThan(nodes[i], nodes[i - 1], dim)) {
                     swap(i, i - 1, children, nodes);
                 }
             }
         }
 
+        // TODO es necesario esto?
         setChildren(children);
         return children;
     }

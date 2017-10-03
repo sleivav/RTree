@@ -23,7 +23,7 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode implements IRTree {
         double maxRight = Double.MIN_VALUE;
         double maxTop = Double.MIN_VALUE;
 
-        for(int i = 0; i < size(); i++) {
+        for (int i = 0; i < size(); i++) {
             MBR rekt = this.getChild(i).getRectangle();
             if (rekt.getLeft() > maxLeft) {
                 maxLeft = rekt.getLeft();
@@ -67,6 +67,8 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode implements IRTree {
         ArrayList<Long> children = this.getChildren();
         if (normalizedX >= normalizedY) {
             initialNodeA = getChild(maxLeftIndex);
+            // TODO no se debería crear un nodo nuevo y asignarle este como hijo? si es que este hijo es una hoja
+            // no tiene children dónde agregar los otros nodos
             initialNodeB = getChild(minRightIndex);
             children.remove(maxLeftIndex);
             children.remove(minRightIndex);
@@ -77,7 +79,7 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode implements IRTree {
             children.remove(minTopIndex);
         }
         Collections.shuffle(children);
-        for(int i = 0; i < children.size(); i++) {
+        for (int i = 0; i < children.size(); i++) {
             IRTreeNode child = readFromDisk(children.get(i)); // Creo que esto se puede optimizar
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
