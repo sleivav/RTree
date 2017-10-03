@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public interface IRTreeNode {
     void add(Long id);
-    void addLocally(Long id);
-    Long[] split();
+    void addLocally(IRTreeNode node);
+    IRTreeNode[] split();
 
     IRTreeNode readFromDisk(Long id);
     void writeToDisk();

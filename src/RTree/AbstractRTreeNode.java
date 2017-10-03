@@ -21,7 +21,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public AbstractRTreeNode(IRTreeNode child) {
         this();
         children.add(child.getId());
-        //split?
     }
 
     @Override
@@ -33,25 +32,26 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         }
         node = node.getParent();
 
-        node.addLocally(id);
+        node.addLocally(readFromDisk(id));
         node.writeToDisk();
     }
 
     @Override
-    public void addLocally(Long id) {
-        double d = indexOf(id);
+    public void addLocally(IRTreeNode node) {
+        double d = indexOf(node.getId());
         int i = (int) d;
         if (i != d) {
-            children.add(i, id);
+            children.add(i, node.getId());
+            node.setParent(this.getId());
 
             if (isFull()) {
-                Long[] nuevos = split();
+                IRTreeNode[] nuevos = split();
                 IRTreeNode parent = getParent();
                 parent.addLocally(nuevos[0]);
                 parent.addLocally(nuevos[1]);
                 parent.writeToDisk();
             } else {
-                // TODO update MBR
+                rectangle.update(node);
             }
         }
     }

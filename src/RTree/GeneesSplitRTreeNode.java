@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class GeneesSplitRTreeNode extends AbstractRTreeNode {
 
     @Override
-    public Long[] split() {
+    public IRTreeNode[] split() {
         // Variables para determinar las separaciones
         double maxLeft = Double.MIN_VALUE;
         double maxBottom = Double.MIN_VALUE;
@@ -61,15 +61,16 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
 
         int mid = children.size() / 2;
         for (int i = 0; i < mid; i++) {
-            node1.add(children.get(i));
-            node2.add(children.get(i + mid));
+            node1.addLocally(nodes[i]);
+            node2.addLocally(nodes[i + mid]);
         }
         if (children.size() % 2 == 1)
-            node2.add(children.get(2 * mid - 1));
+            node2.addLocally(nodes[2 * mid + 1]);
 
-        // TODO crear padre
+        node1.writeToDisk();
+        node2.writeToDisk();
 
-        return null;
+        return new IRTreeNode[]{node1, node2};
     }
 
     private ArrayList<Long> bubblesort(int dim, IRTreeNode[] nodes) {
@@ -85,8 +86,6 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
             }
         }
 
-        // TODO es necesario esto?
-        setChildren(children);
         return children;
     }
 
