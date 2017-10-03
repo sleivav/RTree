@@ -45,6 +45,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         int i = (int) d;
         if (i != d) {
             children.add(i, id);
+            // TODO update MBR
         }
     }
 
@@ -64,7 +65,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(RTree.DIR + "r" + id + ".node"));
             return (AbstractRTreeNode) (in.readObject());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
             return null;
@@ -108,7 +109,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         int index = 0;
         double min_change = Double.MAX_VALUE;
         double min_area = Double.MAX_VALUE;
-        for(int i = 0; i < size(); i++) {
+        for (int i = 0; i < size(); i++) {
             IRTreeNode act = this.getChild(i);
             MBR rekt = act.getRectangle();
             double change = rekt.calcChange(node);
@@ -144,7 +145,14 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         return children.size();
     }
 
+    @Override
     public ArrayList<Long> getChildren() {
         return children;
+    }
+
+    @Override
+    public void setChildren(ArrayList<Long> children) {
+        // TODO update MBR
+        this.children = children;
     }
 }

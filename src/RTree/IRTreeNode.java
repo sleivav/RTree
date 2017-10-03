@@ -1,5 +1,7 @@
 package RTree;
 
+import java.util.ArrayList;
+
 public interface IRTreeNode {
     void add(Long id);
     void addLocally(Long id);
@@ -18,4 +20,7 @@ public interface IRTreeNode {
     boolean isFull();
     boolean isLeaf();
     boolean isMinimal();
+
+    public ArrayList<Long> getChildren();
+    public void setChildren(ArrayList<Long> children);
 }
