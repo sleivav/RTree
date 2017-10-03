@@ -10,14 +10,14 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private final int m = 0;
     private final int M = 0;
 
-    public AbstractRTreeNode(boolean isLeaf) {
+    public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
         this.rectangle = null;
         this.children = new ArrayList<Long>(M);
     }
 
     public AbstractRTreeNode(IRTreeNode child) {
-        this(false);
+        this();
         children.add(child.getId());
         //split?
     }
@@ -142,5 +142,9 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public int size() {
         return children.size();
+    }
+
+    public ArrayList<Long> getChildren() {
+        return children;
     }
 }

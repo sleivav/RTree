@@ -54,4 +54,20 @@ public class MBR {
         boolean interY = (bottom <= rect.bottom && rect.bottom <= top) || (bottom <= rect.top && rect.top <= top);
         return interX && interY;
     }
+
+    public double getLeft() {
+        return left;
+    }
+
+    public double getRight() {
+        return right;
+    }
+
+    public double getBottom() {
+        return bottom;
+    }
+
+    public double getTop() {
+        return top;
+    }
 }
