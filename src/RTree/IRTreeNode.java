@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface IRTreeNode {
     void add(Long id);
     void addLocally(Long id);
-    IRTreeNode split();
+    Long[] split();
 
     IRTreeNode readFromDisk(Long id);
     void writeToDisk();
@@ -22,5 +22,7 @@ public interface IRTreeNode {
     boolean isMinimal();
 
     public ArrayList<Long> getChildren();
+    public IRTreeNode getParent();
     public void setChildren(ArrayList<Long> children);
+    public void setParent(Long parent);
 }

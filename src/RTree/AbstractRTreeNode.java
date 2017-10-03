@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private MBR rectangle;
+    private Long parent;
     private ArrayList<Long> children;
     private Long id;
     private final int m = 0;
@@ -12,6 +13,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
+        this.parent = null;
         this.rectangle = null;
         this.children = new ArrayList<Long>(M);
     }
@@ -27,14 +29,10 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         IRTreeNode node = this;
         while (!node.isLeaf()) {
             int i = node.indexOf(id);
-            IRTreeNode child = node.getChild(i);
-            if (child.isFull()) {
-                // split
-            } else {
-                node.writeToDisk();
-                node = child;
-            }
+            node = node.getChild(i);
         }
+        node = node.getParent();
+
         node.addLocally(id);
         node.writeToDisk();
     }
@@ -45,7 +43,16 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         int i = (int) d;
         if (i != d) {
             children.add(i, id);
-            // TODO update MBR
+
+            if (isFull()) {
+                Long[] nuevos = split();
+                IRTreeNode parent = getParent();
+                parent.addLocally(nuevos[0]);
+                parent.addLocally(nuevos[1]);
+                parent.writeToDisk();
+            } else {
+                // TODO update MBR
+            }
         }
     }
 
@@ -94,8 +101,8 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         if (isLeaf()) {
             return null;
         } else {
-            return readFromDisk(children.get(index));
-        }
+
+        } return readFromDisk(children.get(index));
     }
 
     @Override
@@ -154,5 +161,15 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public void setChildren(ArrayList<Long> children) {
         // TODO update MBR
         this.children = children;
+    }
+
+    @Override
+    public IRTreeNode getParent() {
+        return readFromDisk(parent);
+    }
+
+    @Override
+    public void setParent(Long parent) {
+        this.parent = parent;
     }
 }

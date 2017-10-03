@@ -3,10 +3,10 @@ package RTree;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LinearSplitRTreeNode extends AbstractRTreeNode implements IRTree {
+public class LinearSplitRTreeNode extends AbstractRTreeNode {
 
     @Override
-    public IRTreeNode split() {
+    public Long[] split() {
         // Variables para determinar las separaciones
         double maxLeft = Double.MIN_VALUE;
         int maxLeftIndex = 0;
@@ -65,6 +65,7 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode implements IRTree {
         IRTreeNode initialNodeA;
         IRTreeNode initialNodeB;
         ArrayList<Long> children = this.getChildren();
+
         if (normalizedX >= normalizedY) {
             initialNodeA = getChild(maxLeftIndex);
             // TODO no se debería crear un nodo nuevo y asignarle este como hijo? si es que este hijo es una hoja
@@ -79,8 +80,9 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode implements IRTree {
             children.remove(minTopIndex);
         }
         Collections.shuffle(children);
+
         for (int i = 0; i < children.size(); i++) {
-            IRTreeNode child = readFromDisk(children.get(i)); // Creo que esto se puede optimizar
+            IRTreeNode child = getChild(i); // Creo que esto se puede optimizar
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
             if (rektA.calcChange(child) > rektB.calcChange(child)) {
@@ -95,6 +97,7 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode implements IRTree {
         IRTreeNode newNode = new LinearSplitRTreeNode();
         newNode.add(initialNodeA.getId());
         newNode.add(initialNodeB.getId());
-        return newNode;
+
+        return null;
     }
 }

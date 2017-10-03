@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class GeneesSplitRTreeNode extends AbstractRTreeNode {
 
     @Override
-    public IRTreeNode split() {
+    public Long[] split() {
         // Variables para determinar las separaciones
         double maxLeft = Double.MIN_VALUE;
         double maxBottom = Double.MIN_VALUE;
@@ -19,8 +19,14 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
         double maxRight = Double.MIN_VALUE;
         double maxTop = Double.MIN_VALUE;
 
+        // cargar hijos
+        IRTreeNode[] nodes = new IRTreeNode[size()];
         for (int i = 0; i < size(); i++) {
-            MBR rekt = this.getChild(i).getRectangle();
+            nodes[i] = getChild(i);
+        }
+
+        for (int i = 0; i < size(); i++) {
+            MBR rekt = nodes[i].getRectangle();
 
             minLeft = Math.min(minLeft, rekt.getLeft());
             maxLeft = Math.max(maxLeft, rekt.getLeft());
@@ -49,7 +55,7 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
             dimension = 1;
         }
 
-        ArrayList<Long> children = bubblesort(dimension);
+        ArrayList<Long> children = bubblesort(dimension, nodes);
         IRTreeNode node1 = new GeneesSplitRTreeNode();
         IRTreeNode node2 = new GeneesSplitRTreeNode();
 
@@ -66,13 +72,9 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
         return null;
     }
 
-    private ArrayList<Long> bubblesort(int dim) {
+    private ArrayList<Long> bubblesort(int dim, IRTreeNode[] nodes) {
         // cargar todos los hijos para sort
         ArrayList<Long> children = getChildren();
-        IRTreeNode[] nodes = new IRTreeNode[size()];
-        for (int i = 0; i < size(); i++) {
-            nodes[i] = getChild(i);
-        }
 
         // bubblesort best sort
         for (int i = 0; i < size(); i++) {
