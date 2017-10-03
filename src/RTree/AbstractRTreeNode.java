@@ -57,8 +57,17 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public ArrayList<MBR> search(MBR rekt) {
-        // TODO implement
-        return null;
+        ArrayList<MBR> res = new ArrayList<MBR>();
+        if (isLeaf()) {
+            if (getRectangle().intersecc(rekt)) {
+                res.add(getRectangle());
+            }
+            return res;
+        }
+        for(int i = 0; i < size(); i++) {
+            res.addAll(getChild(i).search(rekt));
+        }
+        return res;
     }
 
     @Override
