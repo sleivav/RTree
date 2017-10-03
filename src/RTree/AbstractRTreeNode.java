@@ -8,14 +8,14 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private Long parent;
     private ArrayList<Long> children;
     private Long id;
-    private final int m = 0;
-    private final int M = 0;
+    private final int min = 0;
+    private final int max = 0;
 
     public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
         this.parent = null;
         this.rectangle = null;
-        this.children = new ArrayList<Long>(M);
+        this.children = new ArrayList<Long>(max);
     }
 
     public AbstractRTreeNode(IRTreeNode child) {
@@ -134,7 +134,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public boolean isFull() {
-        return size() == M;
+        return size() == max;
     }
 
     @Override
@@ -144,7 +144,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public boolean isMinimal() {
-        return size() > m;
+        return size() > min;
     }
 
     @Override
@@ -171,5 +171,15 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public void setParent(Long parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public int getMin() {
+        return min;
+    }
+
+    @Override
+    public int getMax() {
+        return max;
     }
 }

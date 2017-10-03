@@ -25,4 +25,7 @@ public interface IRTreeNode {
     public IRTreeNode getParent();
     public void setChildren(ArrayList<Long> children);
     public void setParent(Long parent);
+
+    int getMax();
+    int getMin();
 }

@@ -6,7 +6,8 @@ import java.util.Collections;
 public class LinearSplitRTreeNode extends AbstractRTreeNode {
 
     @Override
-    public Long[] split() {
+    public IRTreeNode[] split() {
+        ArrayList<IRTreeNode> nodes = new ArrayList<IRTreeNode>();
         // Variables para determinar las separaciones
         double maxLeft = Double.MIN_VALUE;
         int maxLeftIndex = 0;
@@ -24,7 +25,8 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         double maxTop = Double.MIN_VALUE;
 
         for (int i = 0; i < size(); i++) {
-            MBR rekt = this.getChild(i).getRectangle();
+            nodes.add(this.getChild(i));
+            MBR rekt = nodes.get(i).getRectangle();
             if (rekt.getLeft() > maxLeft) {
                 maxLeft = rekt.getLeft();
                 maxLeftIndex = i;
@@ -68,8 +70,6 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
 
         if (normalizedX >= normalizedY) {
             initialNodeA = getChild(maxLeftIndex);
-            // TODO no se debería crear un nodo nuevo y asignarle este como hijo? si es que este hijo es una hoja
-            // no tiene children dónde agregar los otros nodos
             initialNodeB = getChild(minRightIndex);
             children.remove(maxLeftIndex);
             children.remove(minRightIndex);
@@ -85,6 +85,9 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
             IRTreeNode child = getChild(i); // Creo que esto se puede optimizar
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
+            if (children.size() - i < getMin()) {
+                //if (initialNodeA.get)
+            }
             if (rektA.calcChange(child) > rektB.calcChange(child)) {
                 initialNodeB.add(children.get(i));
                 rektB.update(child);
@@ -94,10 +97,6 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
             }
             // TODO garantizar que los nodos quedan con al menos m MBRs
         }
-        IRTreeNode newNode = new LinearSplitRTreeNode();
-        newNode.add(initialNodeA.getId());
-        newNode.add(initialNodeB.getId());
-
-        return null;
+        return new IRTreeNode[]{initialNodeA, initialNodeB};
     }
 }
