@@ -14,13 +14,15 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
         this.parent = null;
-        this.rectangle = null;
         this.children = new ArrayList<Long>(max);
+        this.rectangle = null;
     }
 
-    public AbstractRTreeNode(IRTreeNode child) {
-        this();
-        children.add(child.getId());
+    public AbstractRTreeNode(MBR rectangle) {
+        this.id = IdGenerator.nextId();
+        this.parent = null;
+        this.children = null;
+        this.rectangle = rectangle;
     }
 
     @Override

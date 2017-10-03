@@ -3,7 +3,15 @@ package RTree;
 
 import java.util.ArrayList;
 
-public class GeneesSplitRTreeNode extends AbstractRTreeNode {
+public class GreenesSplitRTreeNode extends AbstractRTreeNode {
+
+    public GreenesSplitRTreeNode() {
+        super();
+    }
+
+    public GreenesSplitRTreeNode(MBR rekt) {
+        super(rekt);
+    }
 
     @Override
     public IRTreeNode[] split() {
@@ -56,8 +64,8 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
         }
 
         ArrayList<Long> children = bubblesort(dimension, nodes);
-        IRTreeNode node1 = new GeneesSplitRTreeNode();
-        IRTreeNode node2 = new GeneesSplitRTreeNode();
+        IRTreeNode node1 = new GreenesSplitRTreeNode();
+        IRTreeNode node2 = new GreenesSplitRTreeNode();
 
         int mid = children.size() / 2;
         for (int i = 0; i < mid; i++) {
