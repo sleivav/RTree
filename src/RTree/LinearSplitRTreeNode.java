@@ -82,20 +82,17 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         Collections.shuffle(children);
 
         for (int i = 0; i < children.size(); i++) {
-            IRTreeNode child = getChild(i); // Creo que esto se puede optimizar
+            IRTreeNode child = getChild(i);
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
-            if (children.size() - i < getMin()) {
-                //if (initialNodeA.get)
-            }
-            if (rektA.calcChange(child) > rektB.calcChange(child)) {
+            if (rektA.calcChange(child) > rektB.calcChange(child) || (children.size() - i < getMin() &&
+                                                                      initialNodeA.size() < getMin())) {
                 initialNodeB.add(children.get(i));
                 rektB.update(child);
             } else {
                 initialNodeA.add(children.get(i));
                 rektA.update(child);
             }
-            // TODO garantizar que los nodos quedan con al menos m MBRs
         }
         return new IRTreeNode[]{initialNodeA, initialNodeB};
     }
