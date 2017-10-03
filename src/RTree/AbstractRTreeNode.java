@@ -41,7 +41,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         children.add(node.getId());
         node.setParent(this.getId());
 
-        if (isFull()) {
+        if (isFull() && parent != null) {
             IRTreeNode[] newNodes = split();
             IRTreeNode parent = getParent();
 
@@ -55,6 +55,11 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         }
     }
 
+    @Override
+    public ArrayList<MBR> search(MBR rekt) {
+        // TODO implement
+        return null;
+    }
 
     @Override
     public void deleteFromDisk() {

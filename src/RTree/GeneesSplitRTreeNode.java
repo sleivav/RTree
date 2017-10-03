@@ -70,6 +70,8 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
         node1.writeToDisk();
         node2.writeToDisk();
 
+        this.deleteFromDisk();
+
         return new IRTreeNode[]{node1, node2};
     }
 

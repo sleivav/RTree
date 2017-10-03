@@ -7,6 +7,8 @@ public interface IRTreeNode {
     void addLocally(IRTreeNode node);
     IRTreeNode[] split();
 
+    ArrayList<MBR> search(MBR rekt);
+
     IRTreeNode readFromDisk(Long id);
     void writeToDisk();
     void deleteFromDisk();
