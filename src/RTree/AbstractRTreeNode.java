@@ -38,23 +38,23 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public void addLocally(IRTreeNode node) {
-        double d = indexOf(node.getId());
-        int i = (int) d;
-        if (i != d) {
-            children.add(i, node.getId());
-            node.setParent(this.getId());
+        children.add(node.getId());
+        node.setParent(this.getId());
 
-            if (isFull()) {
-                IRTreeNode[] nuevos = split();
-                IRTreeNode parent = getParent();
-                parent.addLocally(nuevos[0]);
-                parent.addLocally(nuevos[1]);
-                parent.writeToDisk();
-            } else {
-                rectangle.update(node);
-            }
+        if (isFull()) {
+            IRTreeNode[] newNodes = split();
+            IRTreeNode parent = getParent();
+
+            parent.deleteChild(getId());
+
+            parent.addLocally(newNodes[0]);
+            parent.addLocally(newNodes[1]);
+        } else {
+            rectangle.update(node);
+            writeToDisk();
         }
     }
+
 
     @Override
     public void deleteFromDisk() {
@@ -100,9 +100,13 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public IRTreeNode getChild(int index) {
         if (isLeaf()) {
             return null;
-        } else {
+        }
+        return readFromDisk(children.get(index));
+    }
 
-        } return readFromDisk(children.get(index));
+    @Override
+    public void deleteChild(Long id) {
+        children.remove(id);
     }
 
     @Override
@@ -116,10 +120,12 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         int index = 0;
         double min_change = Double.MAX_VALUE;
         double min_area = Double.MAX_VALUE;
+
         for (int i = 0; i < size(); i++) {
             IRTreeNode act = this.getChild(i);
             MBR rekt = act.getRectangle();
             double change = rekt.calcChange(node);
+
             if (change > min_change) {
                 index = i;
                 min_change = change;

@@ -65,7 +65,7 @@ public class GeneesSplitRTreeNode extends AbstractRTreeNode {
             node2.addLocally(nodes[i + mid]);
         }
         if (children.size() % 2 == 1)
-            node2.addLocally(nodes[2 * mid + 1]);
+            node2.addLocally(nodes[2 * mid]);
 
         node1.writeToDisk();
         node2.writeToDisk();
