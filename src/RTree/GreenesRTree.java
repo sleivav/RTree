@@ -2,6 +2,7 @@ package RTree;
 
 class GreenesRTree extends RTree {
     static void experiment(int rekts, long seed) {
+        // TODO guardar n, block usage, writes y reads a log.
         System.out.println("Launching experiment for Greenes with n = " + rekts);
 
         Experiment.reset(seed);

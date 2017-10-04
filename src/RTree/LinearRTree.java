@@ -1,13 +1,14 @@
 package RTree;
 
-public class LinearRTree extends RTree {
+class LinearRTree extends RTree {
 
     static void experiment(int rekts, long seed) {
+        // TODO guardar n, block usage, writes y reads a log.
         System.out.println("Launching experiment for Linear with n = " + rekts);
 
         Experiment.reset(seed);
+        RTreeNode.reset();
         long t0 = System.currentTimeMillis();
-
         IRTreeNode node1 = new LinearNode(Experiment.getRekt());
         IRTreeNode node2 = new LinearNode(Experiment.getRekt());
         node1.writeToDisk();
@@ -23,7 +24,9 @@ public class LinearRTree extends RTree {
                 System.out.println(i + " insertions done...");
             }
         }
-        System.out.println("insertions ended.");
+        System.out.println("insertions ended");
+        System.out.println("  took " + (System.currentTimeMillis() - t0) / 1000 + " seconds.\n");
+        t0 = System.currentTimeMillis();
 
         // busquedas
         for (int i = 0; i < rekts / 10; i++) {
@@ -35,11 +38,15 @@ public class LinearRTree extends RTree {
         }
         System.out.println("searches ended.");
 
-        System.out.println((System.currentTimeMillis() - t0) / 1000 + " seconds");
-        System.out.println(tree.blockUsage() + "% block usage");
+        System.out.println("  took " + (System.currentTimeMillis() - t0) / 1000 + " seconds.\n");
+
+        System.out.println("read " + tree.root.getReads() + " times");
+        System.out.println("wrote " + tree.root.getWrites() + " times");
+
+        System.out.println(tree.blockUsage() + "% block usage\n");
     }
 
-    public LinearRTree(IRTreeNode node1, IRTreeNode node2) {
+    private LinearRTree(IRTreeNode node1, IRTreeNode node2) {
         root.addLocally(node1);
         root.addLocally(node2);
     }

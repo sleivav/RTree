@@ -11,8 +11,8 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
     private ArrayList<Long> children;
 
     private final int max = 100;
-    public static int reads = 0;
-    public static int writes = 0;
+    private static int reads = 0;
+    private static int writes = 0;
 
     RTreeNode() {
         id = IdGenerator.nextId();
@@ -93,7 +93,6 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public void deleteFromDisk() {
-
         try {
             File file = new File(RTree.DIR + "r" + id + ".node");
             if (!file.delete()) throw new Exception("failed to delete file");
@@ -164,11 +163,6 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
             return null;
         }
         return readFromDisk(children.get(index));
-    }
-
-    @Override
-    public void deleteChild(long id) {
-        children.remove(id);
     }
 
     @Override

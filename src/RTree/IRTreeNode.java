@@ -19,7 +19,6 @@ interface IRTreeNode {
     MBR getRectangle();
     int indexOf(MBR rekt);
     IRTreeNode getChild(int index);
-    void deleteChild(long id);
 
     long getId();
     int size();

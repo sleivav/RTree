@@ -7,8 +7,11 @@ public class Experiment {
     private static Random rand = new Random();
 
     public static void main(String[] args) {
-        GreenesRTree.experiment(10000, 1);
-        GreenesRTree.experiment(10000, 1);
+        long t = System.currentTimeMillis();
+        LinearRTree.experiment(1000, t);
+        LinearRTree.experiment(1000, t);
+        GreenesRTree.experiment(1000, t);
+        GreenesRTree.experiment(1000, t);
     }
 
     static MBR getRekt() {

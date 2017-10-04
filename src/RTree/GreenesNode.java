@@ -78,19 +78,24 @@ class GreenesNode extends RTreeNode {
     }
 
 
+    private void addRekt(MBR rekt) {
+        getData().add(rekt);
+        getRectangle().update(rekt);
+    }
+
     private IRTreeNode[] splitLeaf(int dimension) {
         MBR[] sorted = bubblesort(dimension, getData().toArray(new MBR[size()]));
         int mid = sorted.length / 2;
 
-        IRTreeNode node1 = new GreenesNode(sorted[0]);
-        IRTreeNode node2 = new GreenesNode(sorted[mid]);
+        GreenesNode node1 = new GreenesNode(sorted[0]);
+        GreenesNode node2 = new GreenesNode(sorted[mid]);
 
         for (int i = 1; i < mid; i++) {
-            node1.add(sorted[i], null);
-            node2.add(sorted[i + mid], null);
+            node1.addRekt(sorted[i]);
+            node2.addRekt(sorted[i + mid]);
         }
         if (sorted.length % 2 == 1)
-            node2.add(sorted[2 * mid], null);
+            node2.addRekt(sorted[2 * mid]);
 
         node1.writeToDisk();
         node2.writeToDisk();
