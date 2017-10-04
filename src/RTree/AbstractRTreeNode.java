@@ -5,34 +5,35 @@ import java.util.ArrayList;
 
 abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private MBR rectangle;
-    private Long parent;
+    private long parent;
     private ArrayList<Long> children;
-    private Long id;
+    private long id;
     private final int min = 0;
-    private final int max = 20;
+    private final int max = 8;
 
     public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
-        this.parent = null;
+        this.parent = -1;
         this.children = new ArrayList<Long>(max);
         this.rectangle = null;
     }
 
     public AbstractRTreeNode(MBR rectangle) {
         this.id = IdGenerator.nextId();
-        this.parent = null;
+        this.parent = -1;
         this.children = null;
         this.rectangle = rectangle;
     }
 
     @Override
-    public void add(Long id) {
+    public void add(long id) {
         IRTreeNode node = this;
-        while (!node.isLeaf()) {
+        IRTreeNode aux = node;
+        while (!aux.isLeaf()) {
+            node = aux;
             int i = node.indexOf(id);
-            node = node.getChild(i);
+            aux = node.getChild(i);
         }
-        node = node.getParent();
 
         node.addLocally(readFromDisk(id));
     }
@@ -42,7 +43,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         children.add(node.getId());
         node.setParent(getId());
 
-        if (isFull() && parent != null) {
+        if (isFull() && parent != -1) {
             IRTreeNode[] newNodes = split();
             IRTreeNode parent = getParent();
 
@@ -86,7 +87,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     }
 
     @Override
-    public IRTreeNode readFromDisk(Long id) {
+    public IRTreeNode readFromDisk(long id) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(RTree.DIR + "r" + id + ".node"));
             return (AbstractRTreeNode) (in.readObject());
@@ -123,17 +124,17 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     }
 
     @Override
-    public void deleteChild(Long id) {
+    public void deleteChild(long id) {
         children.remove(id);
     }
 
     @Override
-    public Long getId() {
+    public long getId() {
         return this.id;
     }
 
     @Override
-    public int indexOf(Long id) {
+    public int indexOf(long id) {
         IRTreeNode node = readFromDisk(id);
         int index = 0;
         double min_change = Double.MAX_VALUE;
@@ -187,7 +188,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     }
 
     @Override
-    public void setParent(Long parent) {
+    public void setParent(long parent) {
         this.parent = parent;
         writeToDisk();
     }

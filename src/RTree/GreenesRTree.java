@@ -13,7 +13,7 @@ public class GreenesRTree extends RTree {
 
         long t0 = System.currentTimeMillis();
 
-        int rekts = 10000;
+        int rekts = 1000;
         for (int i = 0; i < rekts; i++) {
             IRTreeNode node = new GreenesSplitRTreeNode(getRekt());
             node.writeToDisk();
