@@ -39,7 +39,7 @@ class GreenesRTree extends RTree {
         System.out.println(tree.blockUsage() + "% block usage");
     }
 
-    GreenesRTree(IRTreeNode node1, IRTreeNode node2) {
+    private GreenesRTree(IRTreeNode node1, IRTreeNode node2) {
         root.addLocally(node1);
         root.addLocally(node2);
     }
