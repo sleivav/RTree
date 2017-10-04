@@ -3,7 +3,7 @@ package RTree;
 import java.util.ArrayList;
 
 interface IRTreeNode {
-    void add(long id);
+    void add(MBR rekt, IRTreeNode parent);
     void addLocally(IRTreeNode node);
     IRTreeNode[] split();
 
@@ -17,7 +17,7 @@ interface IRTreeNode {
     int nodes();
 
     MBR getRectangle();
-    int indexOf(long id);
+    int indexOf(MBR rekt);
     IRTreeNode getChild(int index);
     void deleteChild(long id);
 

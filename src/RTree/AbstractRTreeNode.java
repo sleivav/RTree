@@ -34,16 +34,24 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     }
 
     @Override
-    public void add(long id) {
-        IRTreeNode node = this;
-        IRTreeNode aux = node;
-        while (!aux.isLeaf()) {
-            node = aux;
-            int i = node.indexOf(id);
-            aux = node.getChild(i);
+    public void add(MBR rekt, IRTreeNode parent) {
+        if (!isLeaf()) {
+            int i = indexOf(rekt);
+            getChild(i).add(rekt, this);
+            data.get(i).update(rekt);
+        } else {
+            data.add(rekt);
         }
 
-        node.addLocally(readFromDisk(id));
+        if (isFull() && parent != null) {
+            IRTreeNode[] newNodes = split();
+
+            parent.getChildren().remove(getId());
+            parent.getData().remove(getRectangle());
+
+            parent.addLocally(newNodes[0]);
+            parent.addLocally(newNodes[1]);
+        }
     }
 
     @Override
@@ -51,24 +59,14 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         children.add(node.getId());
         data.add(node.getRectangle());
 
-        node.setParent(getId());
+        // node.setParent(getId());
 
-        if (isFull() && parent != -1) {
-            IRTreeNode[] newNodes = split();
-            IRTreeNode parent = getParent();
+        if (size() == 1)
+            rectangle = node.getRectangle().copy();
+        else
+            rectangle.update(node.getRectangle());
 
-            parent.deleteChild(getId());
-
-            parent.addLocally(newNodes[0]);
-            parent.addLocally(newNodes[1]);
-        } else {
-            // TODO cambiar para hacer update de data en la recursion de add.
-            if (size() == 1) {
-                rectangle = node.getRectangle().copy();
-            }
-            rectangle.update(node);
-            this.writeToDisk();
-        }
+        writeToDisk();
     }
 
     @Override
@@ -168,7 +166,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     }
 
     @Override
-    public int indexOf(long id) {
+    public int indexOf(MBR rect) {
         IRTreeNode node = readFromDisk(id);
         int index = 0;
         float min_change = Float.MAX_VALUE;
@@ -177,7 +175,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         for (int i = 0; i < size(); i++) {
             IRTreeNode act = this.getChild(i);
             MBR rekt = act.getRectangle();
-            float change = rekt.calcChange(node);
+            float change = rekt.calcChange(rect);
 
             if (change > min_change) {
                 index = i;

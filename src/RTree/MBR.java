@@ -16,18 +16,18 @@ class MBR implements Serializable {
         return new MBR(left, bottom, right, top);
     }
 
-    void update(IRTreeNode node) {
-        left = Math.min(left, node.getRectangle().left);
-        right = Math.max(right, node.getRectangle().right);
-        bottom = Math.min(bottom, node.getRectangle().bottom);
-        top = Math.max(top, node.getRectangle().top);
+    void update(MBR rekt) {
+        left = Math.min(left, rekt.left);
+        right = Math.max(right, rekt.right);
+        bottom = Math.min(bottom, rekt.bottom);
+        top = Math.max(top, rekt.top);
     }
 
-    float calcChange(IRTreeNode node) {
-        float newLeft = Math.min(left, node.getRectangle().left);
-        float newRight = Math.max(right, node.getRectangle().right);
-        float newBottom = Math.min(bottom, node.getRectangle().bottom);
-        float newTop = Math.max(top, node.getRectangle().top);
+    float calcChange(MBR rekt) {
+        float newLeft = Math.min(left, rekt.left);
+        float newRight = Math.max(right, rekt.right);
+        float newBottom = Math.min(bottom, rekt.bottom);
+        float newTop = Math.max(top, rekt.top);
 
         float newArea = (newRight - newLeft) * (newTop - newBottom);
         return newArea - area();
