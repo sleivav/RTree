@@ -2,18 +2,16 @@ package RTree;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
 public abstract class RTree implements IRTree {
     public static String DIR = RTree.class.getProtectionDomain().getCodeSource().getLocation().getFile()
             + File.separator;
-    IRTreeNode root;
-    private static Random rand = new Random();
 
-    public RTree(long seed) {
+    IRTreeNode root;
+
+    public RTree() {
         root = newNode();
         root.writeToDisk();
-        rand.setSeed(seed);
     }
 
     @Override
@@ -36,20 +34,12 @@ public abstract class RTree implements IRTree {
     public ArrayList<MBR> search(MBR rectangle) {
         return root.search(rectangle);
     }
-    
-    
+
+    public float blockUsage() {
+        return root.spaceUsed() / root.nodes() / 512.0f;
+    }
 
     abstract public IRTreeNode newNode();
-
-    public static MBR getRekt() {
-        float x = rand.nextFloat() * 500000;
-        float y = rand.nextFloat() * 500000;
-
-        float width = rand.nextFloat() * 100;
-        float height = rand.nextFloat() * 100;
-
-        return new MBR(x, y, x + width, y + height);
-    }
 
 
 }

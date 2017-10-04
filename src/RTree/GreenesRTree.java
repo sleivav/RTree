@@ -1,42 +1,45 @@
 package RTree;
 
-import java.util.ArrayList;
+class GreenesRTree extends RTree {
+    static void experiment(int rekts, long seed) {
+        System.out.println("Launching experiment for Greenes with n = " + rekts);
 
-public class GreenesRTree extends RTree {
-    public static void main(String[] args) {
-        IRTreeNode node1 = new GreenesSplitRTreeNode(getRekt());
-        IRTreeNode node2 = new GreenesSplitRTreeNode(getRekt());
+        Experiment.reset(seed);
+        long t0 = System.currentTimeMillis();
+
+        IRTreeNode node1 = new GreenesSplitRTreeNode(Experiment.getRekt());
+        IRTreeNode node2 = new GreenesSplitRTreeNode(Experiment.getRekt());
         node1.writeToDisk();
         node2.writeToDisk();
 
-        GreenesRTree tree = new GreenesRTree(node1, node2, 1);
+        GreenesRTree tree = new GreenesRTree(node1, node2);
 
-        long t0 = System.currentTimeMillis();
-
-        int rekts = 1000;
+        // inserciones
         for (int i = 0; i < rekts; i++) {
-            IRTreeNode node = new GreenesSplitRTreeNode(getRekt());
+            IRTreeNode node = new GreenesSplitRTreeNode(Experiment.getRekt());
             node.writeToDisk();
             tree.add(node.getId());
-            if (i % 100 == 0) {
-                System.out.println(i);
+            if (i % (rekts / 20) == 0 && i > 0) {
+                System.out.println(i + " insertions done...");
             }
         }
-        System.out.println((System.currentTimeMillis() - t0)/1000 + " seconds");
+        System.out.println("insertions ended.");
 
-        System.out.println("busqueda 1:");
-        System.out.println(node1.getRectangle() + "\n");
-        ArrayList<MBR> found = tree.search(node1.getRectangle());
-        found.forEach(System.out::println);
+        // busquedas
+        for (int i = 0; i < rekts / 10; i++) {
+            MBR rekt = Experiment.getRekt();
+            tree.search(rekt);
+            if (i % (rekts / 200) == 0 && i > 0) {
+                System.out.println(i + " searches done...");
+            }
+        }
+        System.out.println("searches ended.");
 
-        System.out.println("\nbusqueda 2:");
-        System.out.println(node2.getRectangle() + "\n");
-        found = tree.search(node2.getRectangle());
-        found.forEach(System.out::println);
+        System.out.println((System.currentTimeMillis() - t0) / 1000 + " seconds");
+        System.out.println(tree.blockUsage() + "% block usage");
     }
 
-    public GreenesRTree(IRTreeNode node1, IRTreeNode node2, long seed) {
-        super(seed);
+    GreenesRTree(IRTreeNode node1, IRTreeNode node2) {
         root.addLocally(node1);
         root.addLocally(node2);
     }

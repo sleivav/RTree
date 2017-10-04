@@ -13,6 +13,9 @@ public interface IRTreeNode {
     void writeToDisk();
     void deleteFromDisk();
 
+    long spaceUsed();
+    int nodes();
+
     MBR getRectangle();
     int indexOf(long id);
     IRTreeNode getChild(int index);
@@ -24,10 +27,11 @@ public interface IRTreeNode {
     boolean isLeaf();
     boolean isMinimal();
 
-    public ArrayList<Long> getChildren();
-    public IRTreeNode getParent();
-    public void setParent(long parent);
+    ArrayList<Long> getChildren();
+    IRTreeNode getParent();
+    void setParent(long parent);
 
     int getMax();
     int getMin();
+
 }

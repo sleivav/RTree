@@ -9,7 +9,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private ArrayList<Long> children;
     private long id;
     private final int max = 8;
-    private final int min = (int)(0.4 * max);
+    private final int min = (int) (0.4 * max);
 
     public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
@@ -108,6 +108,28 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    @Override
+    public long spaceUsed() {
+        File f = new File(RTree.DIR + "r" + id + ".node");
+        long used = f.length();
+
+        if (children != null)
+            for (Long id : children)
+                used += readFromDisk(id).spaceUsed();
+
+        return used;
+    }
+
+    @Override
+    public int nodes() {
+        int n = 1;
+        if (children != null)
+            for (Long id : children)
+                n += readFromDisk(id).nodes();
+
+        return n;
     }
 
     @Override
