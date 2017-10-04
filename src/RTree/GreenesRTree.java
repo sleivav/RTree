@@ -5,9 +5,10 @@ class GreenesRTree extends RTree {
         System.out.println("Launching experiment for Greenes with n = " + rekts);
 
         Experiment.reset(seed);
+        RTreeNode.reset();
         long t0 = System.currentTimeMillis();
 
-        GreenesRTree tree = new GreenesRTree(Experiment.getRekt(), Experiment.getRekt());
+        RTree tree = new GreenesRTree(Experiment.getRekt(), Experiment.getRekt());
 
         // inserciones
         for (int i = 0; i < rekts; i++) {
@@ -17,8 +18,8 @@ class GreenesRTree extends RTree {
                 System.out.println(i + " insertions done...");
             }
         }
-        System.out.println("insertions ended.");
-        System.out.println(" took " + (System.currentTimeMillis() - t0) / 1000 + " seconds");
+        System.out.println("insertions ended");
+        System.out.println("  took " + (System.currentTimeMillis() - t0) / 1000 + " seconds.\n");
         t0 = System.currentTimeMillis();
 
         // busquedas
@@ -31,8 +32,12 @@ class GreenesRTree extends RTree {
         }
         System.out.println("searches ended.");
 
-        System.out.println(" took " + (System.currentTimeMillis() - t0) / 1000 + " seconds");
-        System.out.println(tree.blockUsage() + "% block usage");
+        System.out.println("  took " + (System.currentTimeMillis() - t0) / 1000 + " seconds.\n");
+
+        System.out.println("read " + tree.root.getReads() + " times");
+        System.out.println("wrote " + tree.root.getWrites() + " times");
+
+        System.out.println(tree.blockUsage() + "% block usage\n");
     }
 
     private GreenesRTree(MBR rekt1, MBR rekt2) {

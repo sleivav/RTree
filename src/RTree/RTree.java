@@ -36,7 +36,7 @@ public abstract class RTree implements IRTree {
     }
 
     float blockUsage() {
-        return root.spaceUsed() / root.nodes() / 512.0f;
+        return root.spaceUsed() / 4096.0f / root.nodes();
     }
 
     abstract public IRTreeNode newNode();

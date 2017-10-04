@@ -29,5 +29,6 @@ interface IRTreeNode {
     ArrayList<Long> getChildren();
     ArrayList<MBR> getData();
     int getMin();
-
+    int getReads();
+    int getWrites();
 }

@@ -10,7 +10,9 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
     private ArrayList<MBR> data;
     private ArrayList<Long> children;
 
-    private final int max = 200;
+    private final int max = 100;
+    public static int reads = 0;
+    public static int writes = 0;
 
     RTreeNode() {
         id = IdGenerator.nextId();
@@ -64,7 +66,6 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
         children.add(node.getId());
         data.add(node.getRectangle());
 
-        // node.setParent(getId());
         if (size() == 1)
             rectangle = node.getRectangle().copy();
         else
@@ -104,6 +105,7 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public IRTreeNode readFromDisk(long id) {
+        reads++;
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(RTree.DIR + "r" + id + ".node"));
             RTreeNode node = (RTreeNode) (in.readObject());
@@ -118,6 +120,7 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public void writeToDisk() {
+        writes++;
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(RTree.DIR + "r" + id + ".node"));
             out.writeObject(this);
@@ -133,7 +136,7 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
         File f = new File(RTree.DIR + "r" + id + ".node");
         long used = f.length();
 
-        if (children != null)
+        if (!isLeaf())
             for (Long id : children)
                 used += readFromDisk(id).spaceUsed();
 
@@ -223,5 +226,19 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
     @Override
     public int getMin() {
         return (int) (0.4 * max);
+    }
+
+    @Override
+    public int getReads() {
+        return reads;
+    }
+
+    @Override
+    public int getWrites() {
+        return writes;
+    }
+
+    static void reset() {
+        reads = writes = 0;
     }
 }
