@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class LinearSplitRTreeNode extends AbstractRTreeNode {
+    public LinearSplitRTreeNode() {
+        super();
+    }
+
+    public LinearSplitRTreeNode(MBR rekt) {
+        super(rekt);
+    }
 
     @Override
     public IRTreeNode[] split() {
@@ -67,20 +74,24 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         IRTreeNode initialNodeA;
         IRTreeNode initialNodeB;
         ArrayList<Long> children = this.getChildren();
-
+        initialNodeA = new LinearSplitRTreeNode();
+        initialNodeB = new LinearSplitRTreeNode();
         if (normalizedX >= normalizedY) {
-            initialNodeA = getChild(maxLeftIndex);
-            initialNodeB = getChild(minRightIndex);
+            initialNodeA.addLocally(getChild(maxLeftIndex));
+            //initialNodeA = getChild(maxLeftIndex);
+            initialNodeB.addLocally(getChild(minRightIndex));
+            //initialNodeB = getChild(minRightIndex);
             children.remove(maxLeftIndex);
             children.remove(minRightIndex);
         } else {
-            initialNodeA = getChild(maxBottomIndex);
-            initialNodeB = getChild(minTopIndex);
+            initialNodeA.addLocally(getChild(maxBottomIndex));
+            //initialNodeA = getChild(maxBottomIndex);
+            initialNodeB.addLocally(getChild(minTopIndex));
+            //initialNodeB = getChild(minTopIndex);
             children.remove(maxBottomIndex);
             children.remove(minTopIndex);
         }
         Collections.shuffle(children);
-
         for (int i = 0; i < children.size(); i++) {
             IRTreeNode child = getChild(i);
             MBR rektA = initialNodeA.getRectangle();
