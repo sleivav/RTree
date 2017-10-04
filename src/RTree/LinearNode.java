@@ -14,6 +14,9 @@ public class LinearNode extends RTreeNode {
 
     @Override
     public IRTreeNode[] split() {
+        if(isLeaf()) {
+            return splitLeaf();
+        }
         ArrayList<IRTreeNode> nodes = new ArrayList<IRTreeNode>();
         // Variables para determinar las separaciones
         float maxLeft = Float.MIN_VALUE;
@@ -73,7 +76,6 @@ public class LinearNode extends RTreeNode {
 
         IRTreeNode initialNodeA;
         IRTreeNode initialNodeB;
-        ArrayList<Long> children = this.getChildren();
         initialNodeA = new LinearNode();
         initialNodeB = new LinearNode();
         int lowIndex;
@@ -85,35 +87,33 @@ public class LinearNode extends RTreeNode {
             lowIndex = maxBottomIndex;
             highIndex = minTopIndex;
         }
-        initialNodeA.addLocally(getChild(lowIndex));
-        initialNodeB.addLocally(getChild(highIndex));
-        children.remove(lowIndex);
+        initialNodeA.addLocally(nodes.get(lowIndex));
+        initialNodeB.addLocally(nodes.get(highIndex));
+        nodes.remove(lowIndex);
         getData().remove(lowIndex);
         if (lowIndex < highIndex) {
-            children.remove(highIndex - 1);
+            nodes.remove(highIndex - 1);
             getData().remove(highIndex - 1);
         } else {
-            children.remove(highIndex);
+            nodes.remove(highIndex);
             getData().remove(highIndex);
         }
 
-        Collections.shuffle(children);
-        for (int i = 0; i < children.size(); i++) {
-            IRTreeNode child = getChild(i);
+        Collections.shuffle(nodes);
+        for (int i = 0; i < nodes.size(); i++) {
+            IRTreeNode child = nodes.get(i);
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
             MBR dataRec = getData().get(i);
             if (rektA.calcChange(dataRec) > rektB.calcChange(dataRec)
-                    || (children.size() - i < getMin() && initialNodeA.size() < getMin())) {
+                    || (nodes.size() - i < getMin() && initialNodeA.size() < getMin())) {
                 initialNodeB.addLocally(child);
-                rektB.update(dataRec);
             } else {
                 initialNodeA.addLocally(child);
-                rektA.update(dataRec);
             }
         }
         initialNodeA.writeToDisk();
-        initialNodeA.writeToDisk();
+        initialNodeB.writeToDisk();
         this.deleteFromDisk();
         return new IRTreeNode[]{initialNodeA, initialNodeB};
     }
@@ -178,9 +178,6 @@ public class LinearNode extends RTreeNode {
 
         IRTreeNode initialNodeA;
         IRTreeNode initialNodeB;
-        ArrayList<Long> children = this.getChildren();
-        initialNodeA = new LinearNode();
-        initialNodeB = new LinearNode();
         int lowIndex;
         int highIndex;
         if (normalizedX >= normalizedY) {
@@ -190,8 +187,8 @@ public class LinearNode extends RTreeNode {
             lowIndex = maxBottomIndex;
             highIndex = minTopIndex;
         }
-        initialNodeA.getData().add(rectangles.get(lowIndex));
-        initialNodeB.getData().add(rectangles.get(highIndex));
+        initialNodeA = new LinearNode(rectangles.get(lowIndex));
+        initialNodeB = new LinearNode(rectangles.get(highIndex));
         rectangles.remove(lowIndex);
         getData().remove(lowIndex);
         if (lowIndex < highIndex) {
@@ -210,14 +207,12 @@ public class LinearNode extends RTreeNode {
             if (rektA.calcChange(dataRec) > rektB.calcChange(dataRec)
                     || (rectangles.size() - i < getMin() && initialNodeA.size() < getMin())) {
                 initialNodeB.getData().add(dataRec);
-                rektB.update(dataRec);
             } else {
                 initialNodeA.getData().add(dataRec);
-                rektA.update(dataRec);
             }
         }
         initialNodeA.writeToDisk();
-        initialNodeA.writeToDisk();
+        initialNodeB.writeToDisk();
         this.deleteFromDisk();
         return new IRTreeNode[]{initialNodeA, initialNodeB};
     }
