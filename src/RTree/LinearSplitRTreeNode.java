@@ -88,9 +88,14 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         initialNodeA.addLocally(getChild(lowIndex));
         initialNodeB.addLocally(getChild(highIndex));
         children.remove(lowIndex);
-        children.remove(highIndex);
         getData().remove(lowIndex);
-        getData().remove(highIndex);
+        if (lowIndex < highIndex) {
+            children.remove(highIndex - 1);
+            getData().remove(highIndex - 1);
+        } else {
+            children.remove(highIndex);
+            getData().remove(highIndex);
+        }
 
         Collections.shuffle(children);
         for (int i = 0; i < children.size(); i++) {
@@ -185,13 +190,17 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         initialNodeA.getData().add(rectangles.get(lowIndex));
         initialNodeB.getData().add(rectangles.get(highIndex));
         rectangles.remove(lowIndex);
-        rectangles.remove(highIndex);
         getData().remove(lowIndex);
-        getData().remove(highIndex);
+        if (lowIndex < highIndex) {
+            rectangles.remove(highIndex - 1);
+            getData().remove(highIndex - 1);
+        } else {
+            rectangles.remove(highIndex);
+            getData().remove(highIndex);
+        }
 
         Collections.shuffle(rectangles);
         for (int i = 0; i < rectangles.size(); i++) {
-            IRTreeNode child = getChild(i);
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
             MBR dataRec = getData().get(i);
