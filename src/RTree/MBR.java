@@ -1,8 +1,9 @@
 package RTree;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MBR {
+public class MBR implements Serializable {
     private double left, bottom, right, top;
 
     public MBR(double left, double bottom, double right, double top) {
@@ -18,6 +19,10 @@ public class MBR {
         bottom = Double.MAX_VALUE;
         top = Double.MIN_VALUE;
         nodes.forEach(this::update);
+    }
+
+    public MBR copy() {
+        return new MBR(left, bottom, right, top);
     }
 
     public void update(IRTreeNode node) {
@@ -41,14 +46,6 @@ public class MBR {
         return (right - left) * (top - bottom);
     }
 
-    public double xDistance(MBR rect) {
-        return Math.min(right, rect.right) - Math.max(left, rect.left);
-    }
-
-    public double yDistance(MBR rect) {
-        return Math.min(top, rect.top) - Math.max(bottom, rect.bottom);
-    }
-
     public boolean intersecc(MBR rect) {
         boolean interX = (left <= rect.left && rect.left <= right) || (left <= rect.right && rect.right <= right);
         boolean interY = (bottom <= rect.bottom && rect.bottom <= top) || (bottom <= rect.top && rect.top <= top);
@@ -69,5 +66,10 @@ public class MBR {
 
     public double getTop() {
         return top;
+    }
+
+    @Override
+    public String toString() {
+        return "p1: (" + left + ", " + bottom + ") p2: (" + right + ", " + top + ")";
     }
 }

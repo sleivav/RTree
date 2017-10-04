@@ -90,8 +90,8 @@ public class GreenesSplitRTreeNode extends AbstractRTreeNode {
         // bubblesort best sort
         for (int i = 0; i < size(); i++) {
             for (int j = 1; j < size(); j++) {
-                if (lessThan(nodes[i], nodes[i - 1], dim)) {
-                    swap(i, i - 1, children, nodes);
+                if (lessThan(nodes[j], nodes[j - 1], dim)) {
+                    swap(j, j - 1, children, nodes);
                 }
             }
         }
@@ -112,5 +112,10 @@ public class GreenesSplitRTreeNode extends AbstractRTreeNode {
         if (dim == 0)
             return node1.getRectangle().getLeft() < node2.getRectangle().getLeft();
         return node1.getRectangle().getBottom() < node2.getRectangle().getBottom();
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + getId() + ", parent: " + parent;
     }
 }

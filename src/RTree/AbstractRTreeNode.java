@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private MBR rectangle;
-    private Long parent;
+    Long parent; // TODO devolver private
     private ArrayList<Long> children;
     private Long id;
     private final int min = 0;
-    private final int max = 0;
+    private final int max = 20;
 
     public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
@@ -35,13 +35,12 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         node = node.getParent();
 
         node.addLocally(readFromDisk(id));
-        node.writeToDisk();
     }
 
     @Override
     public void addLocally(IRTreeNode node) {
         children.add(node.getId());
-        node.setParent(this.getId());
+        node.setParent(getId());
 
         if (isFull() && parent != null) {
             IRTreeNode[] newNodes = split();
@@ -52,8 +51,11 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
             parent.addLocally(newNodes[0]);
             parent.addLocally(newNodes[1]);
         } else {
+            if (size() == 1) {
+                rectangle = node.getRectangle().copy();
+            }
             rectangle.update(node);
-            writeToDisk();
+            this.writeToDisk();
         }
     }
 
@@ -66,7 +68,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
             }
             return res;
         }
-        for(int i = 0; i < size(); i++) {
+        for (int i = 0; i < size(); i++) {
             res.addAll(getChild(i).search(rekt));
         }
         return res;
@@ -193,6 +195,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public void setParent(Long parent) {
         this.parent = parent;
+        writeToDisk();
     }
 
     @Override
