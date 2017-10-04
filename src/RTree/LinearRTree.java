@@ -1,7 +1,5 @@
 package RTree;
 
-import java.util.ArrayList;
-
 public class LinearRTree extends RTree {
 
     static void experiment(int rekts, long seed) {
@@ -10,8 +8,8 @@ public class LinearRTree extends RTree {
         Experiment.reset(seed);
         long t0 = System.currentTimeMillis();
 
-        IRTreeNode node1 = new LinearSplitRTreeNode(Experiment.getRekt());
-        IRTreeNode node2 = new LinearSplitRTreeNode(Experiment.getRekt());
+        IRTreeNode node1 = new LinearNode(Experiment.getRekt());
+        IRTreeNode node2 = new LinearNode(Experiment.getRekt());
         node1.writeToDisk();
         node2.writeToDisk();
 
@@ -48,6 +46,6 @@ public class LinearRTree extends RTree {
 
     @Override
     public IRTreeNode newNode() {
-        return new LinearSplitRTreeNode();
+        return new LinearNode();
     }
 }

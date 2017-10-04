@@ -3,12 +3,12 @@ package RTree;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LinearSplitRTreeNode extends AbstractRTreeNode {
-    public LinearSplitRTreeNode() {
+public class LinearNode extends AbstractRTreeNode {
+    public LinearNode() {
         super();
     }
 
-    public LinearSplitRTreeNode(MBR rekt) {
+    public LinearNode(MBR rekt) {
         super(rekt);
     }
 
@@ -74,8 +74,8 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         IRTreeNode initialNodeA;
         IRTreeNode initialNodeB;
         ArrayList<Long> children = this.getChildren();
-        initialNodeA = new LinearSplitRTreeNode();
-        initialNodeB = new LinearSplitRTreeNode();
+        initialNodeA = new LinearNode();
+        initialNodeB = new LinearNode();
         int lowIndex;
         int highIndex;
         if (normalizedX >= normalizedY) {
@@ -179,8 +179,8 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         IRTreeNode initialNodeA;
         IRTreeNode initialNodeB;
         ArrayList<Long> children = this.getChildren();
-        initialNodeA = new LinearSplitRTreeNode();
-        initialNodeB = new LinearSplitRTreeNode();
+        initialNodeA = new LinearNode();
+        initialNodeB = new LinearNode();
         int lowIndex;
         int highIndex;
         if (normalizedX >= normalizedY) {
