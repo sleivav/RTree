@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class LinearNode extends RTreeNode {
-    public LinearNode() {
+    LinearNode() {
         super();
     }
 
-    public LinearNode(MBR rekt) {
+    LinearNode(MBR rekt) {
         super(rekt);
     }
 
