@@ -39,15 +39,21 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
             int i = indexOf(rekt);
             getChild(i).add(rekt, this);
             data.get(i).update(rekt);
+
+            System.out.println(children.size() + " children");
+            System.out.println(data.size() + " data");
         } else {
             data.add(rekt);
-            if (size() == 1)
-                rectangle = rekt.copy();
-            else
-                rectangle.update(rekt);
         }
 
+        if (size() == 1)
+            rectangle = rekt.copy();
+        else
+            rectangle.update(rekt);
+
+
         if (isFull() && parent != null) {
+            System.out.println("split");
             IRTreeNode[] newNodes = this.split();
 
             parent.getChildren().remove(this.getId());
@@ -55,6 +61,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
             parent.addLocally(newNodes[0]);
             parent.addLocally(newNodes[1]);
+            parent.writeToDisk();
         } else {
             // TODO es necesario solo acá?
             writeToDisk();
@@ -76,13 +83,15 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public ArrayList<MBR> search(MBR rekt) {
         ArrayList<MBR> res = new ArrayList<>();
-        if (isLeaf()) {
-            for (MBR rect : data)
-                if (rect.intersecc(rekt))
-                    res.add(rect);
 
+        if (isLeaf()) {
+            for (int i = 0; i < size(); i++) {
+                if (data.get(i).intersecc(rekt))
+                    res.add(data.get(i));
+            }
             return res;
         }
+
         for (int i = 0; i < size(); i++) {
             if (data.get(i).intersecc(rekt))
                 res.addAll(getChild(i).search(rekt));
@@ -92,10 +101,12 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public void deleteFromDisk() {
+        System.out.println("delete node " + getId());
+
         try {
             File file = new File(RTree.DIR + "r" + id + ".node");
-            if (!file.delete())
-                throw new Exception("failed to delet file");
+            // file.delete();
+            if (!file.delete()) throw new Exception("failed to delete file");
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
@@ -205,7 +216,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public int size() {
-        return children.size();
+        return data.size();
     }
 
     @Override

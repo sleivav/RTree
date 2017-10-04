@@ -19,9 +19,8 @@ public class LinearRTree extends RTree {
 
         // inserciones
         for (int i = 0; i < rekts; i++) {
-            IRTreeNode node = new LinearSplitRTreeNode(Experiment.getRekt());
-            node.writeToDisk();
-            tree.add(node.getId());
+            MBR rekt = Experiment.getRekt();
+            tree.add(rekt);
             if (i % (rekts / 5) == 0 && i > 0) {
                 System.out.println(i + " insertions done...");
             }

@@ -15,52 +15,15 @@ class GreenesSplitRTreeNode extends AbstractRTreeNode {
 
     @Override
     public IRTreeNode[] split() {
-        // Variables para determinar las separaciones
-        float maxLeft = Float.MIN_VALUE;
-        float maxBottom = Float.MIN_VALUE;
-        float minRight = Float.MAX_VALUE;
-        float minTop = Float.MAX_VALUE;
+        int dimension = getCutDimension();
 
-        // Variables para determinar la normalizacion
-        float minLeft = Float.MAX_VALUE;
-        float minBottom = Float.MAX_VALUE;
-        float maxRight = Float.MIN_VALUE;
-        float maxTop = Float.MIN_VALUE;
-
+        if (isLeaf()) {
+            return splitLeaf(dimension);
+        }
         // cargar hijos
         IRTreeNode[] nodes = new IRTreeNode[size()];
         for (int i = 0; i < size(); i++) {
             nodes[i] = getChild(i);
-        }
-
-        for (int i = 0; i < size(); i++) {
-            MBR rekt = nodes[i].getRectangle();
-
-            minLeft = Math.min(minLeft, rekt.getLeft());
-            maxLeft = Math.max(maxLeft, rekt.getLeft());
-
-            minBottom = Math.min(minBottom, rekt.getBottom());
-            maxBottom = Math.max(maxBottom, rekt.getBottom());
-
-            minRight = Math.min(minRight, rekt.getRight());
-            maxRight = Math.max(maxRight, rekt.getRight());
-
-            minTop = Math.min(minTop, rekt.getTop());
-            maxTop = Math.max(maxTop, rekt.getTop());
-        }
-
-        float separationX = Math.abs(maxLeft - minRight);
-        float separationY = Math.abs(maxBottom - minTop);
-        float rangeX = maxRight - minLeft;
-        float rangeY = maxTop - minBottom;
-        float normalizedX = separationX / rangeX;
-        float normalizedY = separationY / rangeY;
-
-        int dimension;
-        if (normalizedX >= normalizedY) {
-            dimension = 0;
-        } else {
-            dimension = 1;
         }
 
         ArrayList<Long> children = bubblesort(dimension, nodes);
@@ -112,5 +75,98 @@ class GreenesSplitRTreeNode extends AbstractRTreeNode {
         if (dim == 0)
             return node1.getRectangle().getLeft() < node2.getRectangle().getLeft();
         return node1.getRectangle().getBottom() < node2.getRectangle().getBottom();
+    }
+
+
+    private IRTreeNode[] splitLeaf(int dimension) {
+        MBR[] sorted = bubblesort(dimension, getData().toArray(new MBR[size()]));
+        int mid = sorted.length / 2;
+
+        IRTreeNode node1 = new GreenesSplitRTreeNode(sorted[0]);
+        IRTreeNode node2 = new GreenesSplitRTreeNode(sorted[mid]);
+
+        for (int i = 0; i < mid; i++) {
+            node1.add(sorted[i], null);
+            node2.add(sorted[i + mid], null);
+        }
+        if (sorted.length % 2 == 1)
+            node2.add(sorted[2 * mid], null);
+
+        node1.writeToDisk();
+        node2.writeToDisk();
+
+        this.deleteFromDisk();
+
+        return new IRTreeNode[]{node1, node2};
+
+    }
+
+    private MBR[] bubblesort(int dim, MBR[] data) {
+        // bubblesort best sort
+        for (int i = 0; i < size(); i++) {
+            for (int j = 1; j < size(); j++) {
+                if (lessThan(data[j], data[j - 1], dim)) {
+                    swap(j, j - 1, data);
+                }
+            }
+        }
+
+        return data;
+    }
+
+    private void swap(int i, int j, MBR[] data) {
+        MBR rekt = data[i];
+        data[i] = data[j];
+        data[j] = rekt;
+    }
+
+    private boolean lessThan(MBR rek1, MBR rek2, int dim) {
+        if (dim == 0)
+            return rek1.getLeft() < rek2.getLeft();
+        return rek1.getBottom() < rek2.getBottom();
+    }
+
+    private int getCutDimension() {
+        // Variables para determinar las separaciones
+        float maxLeft = Float.MIN_VALUE;
+        float maxBottom = Float.MIN_VALUE;
+        float minRight = Float.MAX_VALUE;
+        float minTop = Float.MAX_VALUE;
+
+        // Variables para determinar la normalizacion
+        float minLeft = Float.MAX_VALUE;
+        float minBottom = Float.MAX_VALUE;
+        float maxRight = Float.MIN_VALUE;
+        float maxTop = Float.MIN_VALUE;
+
+        for (int i = 0; i < size(); i++) {
+            MBR rekt = getData().get(i);
+
+            minLeft = Math.min(minLeft, rekt.getLeft());
+            maxLeft = Math.max(maxLeft, rekt.getLeft());
+
+            minBottom = Math.min(minBottom, rekt.getBottom());
+            maxBottom = Math.max(maxBottom, rekt.getBottom());
+
+            minRight = Math.min(minRight, rekt.getRight());
+            maxRight = Math.max(maxRight, rekt.getRight());
+
+            minTop = Math.min(minTop, rekt.getTop());
+            maxTop = Math.max(maxTop, rekt.getTop());
+        }
+
+        float separationX = Math.abs(maxLeft - minRight);
+        float separationY = Math.abs(maxBottom - minTop);
+        float rangeX = maxRight - minLeft;
+        float rangeY = maxTop - minBottom;
+        float normalizedX = separationX / rangeX;
+        float normalizedY = separationY / rangeY;
+
+        if (normalizedX >= normalizedY) {
+            return 0;
+        } else {
+            return 1;
+        }
+
     }
 }

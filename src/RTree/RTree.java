@@ -17,7 +17,7 @@ public abstract class RTree implements IRTree {
     @Override
     public void add(MBR rekt) {
         root.add(rekt, null);
-        root = root.readFromDisk(root.getId());
+        // root = root.readFromDisk(root.getId());
 
         if (root.isFull()) {
             IRTreeNode parent = newNode();

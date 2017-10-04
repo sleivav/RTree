@@ -7,18 +7,12 @@ class GreenesRTree extends RTree {
         Experiment.reset(seed);
         long t0 = System.currentTimeMillis();
 
-        IRTreeNode node1 = new GreenesSplitRTreeNode(Experiment.getRekt());
-        IRTreeNode node2 = new GreenesSplitRTreeNode(Experiment.getRekt());
-        node1.writeToDisk();
-        node2.writeToDisk();
-
-        GreenesRTree tree = new GreenesRTree(node1, node2);
+        GreenesRTree tree = new GreenesRTree(Experiment.getRekt(), Experiment.getRekt());
 
         // inserciones
         for (int i = 0; i < rekts; i++) {
-            IRTreeNode node = new GreenesSplitRTreeNode(Experiment.getRekt());
-            node.writeToDisk();
-            tree.add(node.getId());
+            MBR rekt = Experiment.getRekt();
+            tree.add(rekt);
             if (i % (rekts / 5) == 0 && i > 0) {
                 System.out.println(i + " insertions done...");
             }
@@ -39,9 +33,9 @@ class GreenesRTree extends RTree {
         System.out.println(tree.blockUsage() + "% block usage");
     }
 
-    private GreenesRTree(IRTreeNode node1, IRTreeNode node2) {
-        root.addLocally(node1);
-        root.addLocally(node2);
+    private GreenesRTree(MBR rekt1, MBR rekt2) {
+        root = new GreenesSplitRTreeNode(rekt1);
+        add(rekt2);
     }
 
     public IRTreeNode newNode() {
