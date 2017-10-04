@@ -4,24 +4,33 @@ import java.io.*;
 import java.util.ArrayList;
 
 abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
+    private long id;
+
     private MBR rectangle;
+    private ArrayList<MBR> data;
+
     private long parent;
     private ArrayList<Long> children;
-    private long id;
+
     private final int max = 8;
 
     AbstractRTreeNode() {
-        this.id = IdGenerator.nextId();
-        this.parent = -1;
-        this.children = new ArrayList<>(max);
-        this.rectangle = null;
+        id = IdGenerator.nextId();
+        parent = -1;
+        children = new ArrayList<>(max);
+        rectangle = null;
+
+        data = new ArrayList<>(max);
     }
 
     AbstractRTreeNode(MBR rectangle) {
-        this.id = IdGenerator.nextId();
-        this.parent = -1;
-        this.children = null;
+        id = IdGenerator.nextId();
+        parent = -1;
+        children = null;
         this.rectangle = rectangle;
+
+        data = new ArrayList<>(max);
+        data.add(rectangle);
     }
 
     @Override
@@ -40,6 +49,8 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public void addLocally(IRTreeNode node) {
         children.add(node.getId());
+        data.add(node.getRectangle());
+
         node.setParent(getId());
 
         if (isFull() && parent != -1) {
@@ -51,6 +62,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
             parent.addLocally(newNodes[0]);
             parent.addLocally(newNodes[1]);
         } else {
+            // TODO cambiar para hacer update de data en la recursion de add.
             if (size() == 1) {
                 rectangle = node.getRectangle().copy();
             }
@@ -197,6 +209,11 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public ArrayList<Long> getChildren() {
         return children;
+    }
+
+    @Override
+    public ArrayList<MBR> getData() {
+        return data;
     }
 
     @Override
