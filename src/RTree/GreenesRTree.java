@@ -19,8 +19,10 @@ class GreenesRTree extends RTree {
                 System.out.println(i + " insertions done...");
             }
         }
+        long tf = System.currentTimeMillis();
+        double insertion_time = (tf-t0) / 1000.0;
         System.out.println("insertions ended");
-        System.out.println("  took " + (System.currentTimeMillis() - t0) / 1000 + " seconds.\n");
+        System.out.println("  took " + (tf - t0) / 1000 + " seconds.\n");
         t0 = System.currentTimeMillis();
 
         // busquedas
@@ -32,13 +34,14 @@ class GreenesRTree extends RTree {
             }
         }
         System.out.println("searches ended.");
-
+        double search_time = (System.currentTimeMillis() - t0) / 1000.0;
         System.out.println("  took " + (System.currentTimeMillis() - t0) / 1000 + " seconds.\n");
 
         System.out.println("read " + tree.root.getReads() + " times");
         System.out.println("wrote " + tree.root.getWrites() + " times");
 
         System.out.println(tree.blockUsage() + "% block usage\n");
+        Logger.log("Greenes Tree", rekts, insertion_time, search_time, tree.root.getReads(), tree.root.getWrites(), tree.blockUsage());
     }
 
     private GreenesRTree(MBR rekt1, MBR rekt2) {
