@@ -113,9 +113,4 @@ public class GreenesSplitRTreeNode extends AbstractRTreeNode {
             return node1.getRectangle().getLeft() < node2.getRectangle().getLeft();
         return node1.getRectangle().getBottom() < node2.getRectangle().getBottom();
     }
-
-    @Override
-    public String toString() {
-        return "id: " + getId() + ", parent: " + parent;
-    }
 }
