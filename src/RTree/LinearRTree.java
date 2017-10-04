@@ -30,6 +30,10 @@ class LinearRTree extends RTree {
         System.out.println("  took " + (tf - t0) / 1000 + " seconds.\n");
         t0 = System.currentTimeMillis();
 
+        int insertion_reads = tree.root.getReads();
+        int insertion_writes = tree.root.getWrites();
+        RTreeNode.reset();
+
         // busquedas
         for (int i = 0; i < rekts / 10; i++) {
             MBR rekt = Experiment.getRekt();
@@ -46,7 +50,8 @@ class LinearRTree extends RTree {
         System.out.println("wrote " + tree.root.getWrites() + " times");
 
         System.out.println(tree.blockUsage() + "% block usage\n");
-        Logger.log("Linear Tree", rekts, insertion_time, search_time, tree.root.getReads(), tree.root.getWrites(), tree.blockUsage());
+        Logger.log("Linear Tree", rekts, insertion_time, search_time, insertion_reads, insertion_writes,
+                   tree.root.getReads(), tree.root.getWrites(), tree.blockUsage());
     }
 
     private LinearRTree(IRTreeNode node1, IRTreeNode node2) {
