@@ -8,8 +8,8 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private long parent;
     private ArrayList<Long> children;
     private long id;
-    private final int min = 0;
     private final int max = 8;
+    private final int min = (int)(0.4 * max);
 
     public AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
@@ -137,13 +137,13 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public int indexOf(long id) {
         IRTreeNode node = readFromDisk(id);
         int index = 0;
-        double min_change = Double.MAX_VALUE;
-        double min_area = Double.MAX_VALUE;
+        float min_change = Float.MAX_VALUE;
+        float min_area = Float.MAX_VALUE;
 
         for (int i = 0; i < size(); i++) {
             IRTreeNode act = this.getChild(i);
             MBR rekt = act.getRectangle();
-            double change = rekt.calcChange(node);
+            float change = rekt.calcChange(node);
 
             if (change > min_change) {
                 index = i;

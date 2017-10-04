@@ -16,16 +16,16 @@ public class GreenesSplitRTreeNode extends AbstractRTreeNode {
     @Override
     public IRTreeNode[] split() {
         // Variables para determinar las separaciones
-        double maxLeft = Double.MIN_VALUE;
-        double maxBottom = Double.MIN_VALUE;
-        double minRight = Double.MAX_VALUE;
-        double minTop = Double.MAX_VALUE;
+        float maxLeft = Float.MIN_VALUE;
+        float maxBottom = Float.MIN_VALUE;
+        float minRight = Float.MAX_VALUE;
+        float minTop = Float.MAX_VALUE;
 
         // Variables para determinar la normalizacion
-        double minLeft = Double.MAX_VALUE;
-        double minBottom = Double.MAX_VALUE;
-        double maxRight = Double.MIN_VALUE;
-        double maxTop = Double.MIN_VALUE;
+        float minLeft = Float.MAX_VALUE;
+        float minBottom = Float.MAX_VALUE;
+        float maxRight = Float.MIN_VALUE;
+        float maxTop = Float.MIN_VALUE;
 
         // cargar hijos
         IRTreeNode[] nodes = new IRTreeNode[size()];
@@ -49,12 +49,12 @@ public class GreenesSplitRTreeNode extends AbstractRTreeNode {
             maxTop = Math.max(maxTop, rekt.getTop());
         }
 
-        double separationX = Math.abs(maxLeft - minRight);
-        double separationY = Math.abs(maxBottom - minTop);
-        double rangeX = maxRight - minLeft;
-        double rangeY = maxTop - minBottom;
-        double normalizedX = separationX / rangeX;
-        double normalizedY = separationY / rangeY;
+        float separationX = Math.abs(maxLeft - minRight);
+        float separationY = Math.abs(maxBottom - minTop);
+        float rangeX = maxRight - minLeft;
+        float rangeY = maxTop - minBottom;
+        float normalizedX = separationX / rangeX;
+        float normalizedY = separationY / rangeY;
 
         int dimension;
         if (normalizedX >= normalizedY) {

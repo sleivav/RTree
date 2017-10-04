@@ -9,7 +9,7 @@ public class GreenesRTree extends RTree {
         node1.writeToDisk();
         node2.writeToDisk();
 
-        GreenesRTree tree = new GreenesRTree(node1, node2);
+        GreenesRTree tree = new GreenesRTree(node1, node2, 1);
 
         long t0 = System.currentTimeMillis();
 
@@ -35,7 +35,8 @@ public class GreenesRTree extends RTree {
         found.forEach(System.out::println);
     }
 
-    public GreenesRTree(IRTreeNode node1, IRTreeNode node2) {
+    public GreenesRTree(IRTreeNode node1, IRTreeNode node2, long seed) {
+        super(seed);
         root.addLocally(node1);
         root.addLocally(node2);
     }

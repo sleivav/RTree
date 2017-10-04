@@ -10,9 +10,10 @@ public abstract class RTree implements IRTree {
     IRTreeNode root;
     private static Random rand = new Random();
 
-    public RTree() {
+    public RTree(long seed) {
         root = newNode();
         root.writeToDisk();
+        rand.setSeed(seed);
     }
 
     @Override
@@ -35,16 +36,20 @@ public abstract class RTree implements IRTree {
     public ArrayList<MBR> search(MBR rectangle) {
         return root.search(rectangle);
     }
+    
+    
 
     abstract public IRTreeNode newNode();
 
     public static MBR getRekt() {
-        Double x = rand.nextDouble() * 500000;
-        Double y = rand.nextDouble() * 500000;
+        float x = rand.nextFloat() * 500000;
+        float y = rand.nextFloat() * 500000;
 
-        Double width = rand.nextDouble() * 100;
-        Double height = rand.nextDouble() * 100;
+        float width = rand.nextFloat() * 100;
+        float height = rand.nextFloat() * 100;
 
         return new MBR(x, y, x + width, y + height);
     }
+
+
 }

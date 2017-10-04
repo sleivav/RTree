@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MBR implements Serializable {
-    private double left, bottom, right, top;
+    private float left, bottom, right, top;
 
-    public MBR(double left, double bottom, double right, double top) {
+    public MBR(float left, float bottom, float right, float top) {
         this.left = left;
         this.bottom = bottom;
         this.right = right;
@@ -14,10 +14,10 @@ public class MBR implements Serializable {
     }
 
     public MBR(ArrayList<IRTreeNode> nodes) {
-        left = Double.MAX_VALUE;
-        right = Double.MIN_VALUE;
-        bottom = Double.MAX_VALUE;
-        top = Double.MIN_VALUE;
+        left = Float.MAX_VALUE;
+        right = Float.MIN_VALUE;
+        bottom = Float.MAX_VALUE;
+        top = Float.MIN_VALUE;
         nodes.forEach(this::update);
     }
 
@@ -32,17 +32,17 @@ public class MBR implements Serializable {
         top = Math.max(top, node.getRectangle().top);
     }
 
-    public double calcChange(IRTreeNode node) {
-        double newLeft = Math.min(left, node.getRectangle().left);
-        double newRight = Math.max(right, node.getRectangle().right);
-        double newBottom = Math.min(bottom, node.getRectangle().bottom);
-        double newTop = Math.max(top, node.getRectangle().top);
+    public float calcChange(IRTreeNode node) {
+        float newLeft = Math.min(left, node.getRectangle().left);
+        float newRight = Math.max(right, node.getRectangle().right);
+        float newBottom = Math.min(bottom, node.getRectangle().bottom);
+        float newTop = Math.max(top, node.getRectangle().top);
 
-        double newArea = (newRight - newLeft) * (newTop - newBottom);
+        float newArea = (newRight - newLeft) * (newTop - newBottom);
         return newArea - area();
     }
 
-    public double area() {
+    public float area() {
         return (right - left) * (top - bottom);
     }
 
@@ -52,19 +52,19 @@ public class MBR implements Serializable {
         return interX && interY;
     }
 
-    public double getLeft() {
+    public float getLeft() {
         return left;
     }
 
-    public double getRight() {
+    public float getRight() {
         return right;
     }
 
-    public double getBottom() {
+    public float getBottom() {
         return bottom;
     }
 
-    public double getTop() {
+    public float getTop() {
         return top;
     }
 
