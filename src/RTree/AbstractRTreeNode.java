@@ -78,7 +78,8 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public void deleteFromDisk() {
         try {
             File file = new File(RTree.DIR + "r" + id + ".node");
-            file.delete();
+            if (!file.delete())
+                throw new Exception("failed to delet file");
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
