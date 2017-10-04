@@ -3,7 +3,7 @@ package RTree;
 import java.io.*;
 import java.util.ArrayList;
 
-abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
+abstract class RTreeNode implements IRTreeNode, Serializable {
     private long id;
 
     private MBR rectangle;
@@ -12,7 +12,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     private final int max = 200;
 
-    AbstractRTreeNode() {
+    RTreeNode() {
         id = IdGenerator.nextId();
         children = new ArrayList<>(max);
         rectangle = null;
@@ -20,7 +20,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         data = new ArrayList<>(max);
     }
 
-    AbstractRTreeNode(MBR rectangle) {
+    RTreeNode(MBR rectangle) {
         id = IdGenerator.nextId();
         children = null;
         this.rectangle = rectangle.copy();
@@ -106,7 +106,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public IRTreeNode readFromDisk(long id) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(RTree.DIR + "r" + id + ".node"));
-            AbstractRTreeNode node = (AbstractRTreeNode) (in.readObject());
+            RTreeNode node = (RTreeNode) (in.readObject());
             in.close();
             return node;
         } catch (Exception e) {

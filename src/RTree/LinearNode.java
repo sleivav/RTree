@@ -3,7 +3,7 @@ package RTree;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LinearNode extends AbstractRTreeNode {
+public class LinearNode extends RTreeNode {
     public LinearNode() {
         super();
     }

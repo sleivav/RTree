@@ -3,13 +3,13 @@ package RTree;
 
 import java.util.ArrayList;
 
-class GreenesSplitRTreeNode extends AbstractRTreeNode {
+class GreenesNode extends RTreeNode {
 
-    GreenesSplitRTreeNode() {
+    GreenesNode() {
         super();
     }
 
-    GreenesSplitRTreeNode(MBR rekt) {
+    GreenesNode(MBR rekt) {
         super(rekt);
     }
 
@@ -27,8 +27,8 @@ class GreenesSplitRTreeNode extends AbstractRTreeNode {
         }
 
         ArrayList<Long> children = bubblesort(dimension, nodes);
-        IRTreeNode node1 = new GreenesSplitRTreeNode();
-        IRTreeNode node2 = new GreenesSplitRTreeNode();
+        IRTreeNode node1 = new GreenesNode();
+        IRTreeNode node2 = new GreenesNode();
 
         int mid = children.size() / 2;
         for (int i = 0; i < mid; i++) {
@@ -82,8 +82,8 @@ class GreenesSplitRTreeNode extends AbstractRTreeNode {
         MBR[] sorted = bubblesort(dimension, getData().toArray(new MBR[size()]));
         int mid = sorted.length / 2;
 
-        IRTreeNode node1 = new GreenesSplitRTreeNode(sorted[0]);
-        IRTreeNode node2 = new GreenesSplitRTreeNode(sorted[mid]);
+        IRTreeNode node1 = new GreenesNode(sorted[0]);
+        IRTreeNode node2 = new GreenesNode(sorted[mid]);
 
         for (int i = 1; i < mid; i++) {
             node1.add(sorted[i], null);

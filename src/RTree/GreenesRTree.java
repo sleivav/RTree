@@ -36,11 +36,11 @@ class GreenesRTree extends RTree {
     }
 
     private GreenesRTree(MBR rekt1, MBR rekt2) {
-        root = new GreenesSplitRTreeNode(rekt1);
+        root = new GreenesNode(rekt1);
         add(rekt2);
     }
 
     public IRTreeNode newNode() {
-        return new GreenesSplitRTreeNode();
+        return new GreenesNode();
     }
 }
