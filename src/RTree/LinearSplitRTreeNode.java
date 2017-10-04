@@ -76,33 +76,35 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
         ArrayList<Long> children = this.getChildren();
         initialNodeA = new LinearSplitRTreeNode();
         initialNodeB = new LinearSplitRTreeNode();
+        int lowIndex;
+        int highIndex;
         if (normalizedX >= normalizedY) {
-            initialNodeA.addLocally(getChild(maxLeftIndex));
-            //initialNodeA = getChild(maxLeftIndex);
-            initialNodeB.addLocally(getChild(minRightIndex));
-            //initialNodeB = getChild(minRightIndex);
-            children.remove(maxLeftIndex);
-            children.remove(minRightIndex);
+            lowIndex = maxLeftIndex;
+            highIndex = minRightIndex;
         } else {
-            initialNodeA.addLocally(getChild(maxBottomIndex));
-            //initialNodeA = getChild(maxBottomIndex);
-            initialNodeB.addLocally(getChild(minTopIndex));
-            //initialNodeB = getChild(minTopIndex);
-            children.remove(maxBottomIndex);
-            children.remove(minTopIndex);
+            lowIndex = maxBottomIndex;
+            highIndex = minTopIndex;
         }
+        initialNodeA.addLocally(getChild(lowIndex));
+        initialNodeB.addLocally(getChild(highIndex));
+        children.remove(lowIndex);
+        children.remove(highIndex);
+        getData().remove(lowIndex);
+        getData().remove(highIndex);
+
         Collections.shuffle(children);
         for (int i = 0; i < children.size(); i++) {
             IRTreeNode child = getChild(i);
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
-            if (rektA.calcChange(child) > rektB.calcChange(child) || (children.size() - i < getMin() &&
-                                                                      initialNodeA.size() < getMin())) {
-                initialNodeB.add(children.get(i));
-                rektB.update(child);
+            MBR dataRec = getData().get(i);
+            if (rektA.calcChange(dataRec) > rektB.calcChange(dataRec)
+                    || (children.size() - i < getMin() && initialNodeA.size() < getMin())) {
+                initialNodeB.addLocally(child);
+                rektB.update(dataRec);
             } else {
-                initialNodeA.add(children.get(i));
-                rektA.update(child);
+                initialNodeA.addLocally(child);
+                rektA.update(dataRec);
             }
         }
         return new IRTreeNode[]{initialNodeA, initialNodeB};
