@@ -29,8 +29,6 @@ interface IRTreeNode {
     ArrayList<Long> getChildren();
     IRTreeNode getParent();
     void setParent(long parent);
-
-    int getMax();
     int getMin();
 
 }

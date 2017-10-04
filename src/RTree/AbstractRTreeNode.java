@@ -9,7 +9,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private ArrayList<Long> children;
     private long id;
     private final int max = 8;
-    private final int min = (int) (0.4 * max);
 
     AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
@@ -212,11 +211,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public int getMin() {
-        return min;
-    }
-
-    @Override
-    public int getMax() {
-        return max;
+        return (int) (0.4 * max);
     }
 }
