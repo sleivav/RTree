@@ -41,16 +41,23 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
             data.get(i).update(rekt);
         } else {
             data.add(rekt);
+            if (size() == 1)
+                rectangle = rekt.copy();
+            else
+                rectangle.update(rekt);
         }
 
         if (isFull() && parent != null) {
-            IRTreeNode[] newNodes = split();
+            IRTreeNode[] newNodes = this.split();
 
-            parent.getChildren().remove(getId());
-            parent.getData().remove(getRectangle());
+            parent.getChildren().remove(this.getId());
+            parent.getData().remove(this.getRectangle());
 
             parent.addLocally(newNodes[0]);
             parent.addLocally(newNodes[1]);
+        } else {
+            // TODO es necesario solo acá?
+            writeToDisk();
         }
     }
 
@@ -60,26 +67,25 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
         data.add(node.getRectangle());
 
         // node.setParent(getId());
-
         if (size() == 1)
             rectangle = node.getRectangle().copy();
         else
             rectangle.update(node.getRectangle());
-
-        writeToDisk();
     }
 
     @Override
     public ArrayList<MBR> search(MBR rekt) {
         ArrayList<MBR> res = new ArrayList<>();
         if (isLeaf()) {
-            if (getRectangle().intersecc(rekt)) {
-                res.add(getRectangle());
-            }
+            for (MBR rect : data)
+                if (rect.intersecc(rekt))
+                    res.add(rect);
+
             return res;
         }
         for (int i = 0; i < size(); i++) {
-            res.addAll(getChild(i).search(rekt));
+            if (data.get(i).intersecc(rekt))
+                res.addAll(getChild(i).search(rekt));
         }
         return res;
     }
@@ -167,17 +173,15 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public int indexOf(MBR rect) {
-        IRTreeNode node = readFromDisk(id);
         int index = 0;
         float min_change = Float.MAX_VALUE;
         float min_area = Float.MAX_VALUE;
 
         for (int i = 0; i < size(); i++) {
-            IRTreeNode act = this.getChild(i);
-            MBR rekt = act.getRectangle();
+            MBR rekt = data.get(i);
             float change = rekt.calcChange(rect);
 
-            if (change > min_change) {
+            if (change < min_change) {
                 index = i;
                 min_change = change;
                 min_area = rekt.area();
