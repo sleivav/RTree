@@ -85,7 +85,7 @@ class GreenesSplitRTreeNode extends AbstractRTreeNode {
         IRTreeNode node1 = new GreenesSplitRTreeNode(sorted[0]);
         IRTreeNode node2 = new GreenesSplitRTreeNode(sorted[mid]);
 
-        for (int i = 0; i < mid; i++) {
+        for (int i = 1; i < mid; i++) {
             node1.add(sorted[i], null);
             node2.add(sorted[i + mid], null);
         }

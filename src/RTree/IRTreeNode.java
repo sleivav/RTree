@@ -28,8 +28,6 @@ interface IRTreeNode {
 
     ArrayList<Long> getChildren();
     ArrayList<MBR> getData();
-    IRTreeNode getParent();
-    void setParent(long parent);
     int getMin();
 
 }

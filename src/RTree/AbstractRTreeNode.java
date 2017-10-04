@@ -8,15 +8,12 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     private MBR rectangle;
     private ArrayList<MBR> data;
-
-    private long parent;
     private ArrayList<Long> children;
 
-    private final int max = 8;
+    private final int max = 200;
 
     AbstractRTreeNode() {
         id = IdGenerator.nextId();
-        parent = -1;
         children = new ArrayList<>(max);
         rectangle = null;
 
@@ -25,9 +22,8 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     AbstractRTreeNode(MBR rectangle) {
         id = IdGenerator.nextId();
-        parent = -1;
         children = null;
-        this.rectangle = rectangle;
+        this.rectangle = rectangle.copy();
 
         data = new ArrayList<>(max);
         data.add(rectangle);
@@ -37,11 +33,8 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public void add(MBR rekt, IRTreeNode parent) {
         if (!isLeaf()) {
             int i = indexOf(rekt);
-            getChild(i).add(rekt, this);
             data.get(i).update(rekt);
-
-            System.out.println(children.size() + " children");
-            System.out.println(data.size() + " data");
+            getChild(i).add(rekt, this);
         } else {
             data.add(rekt);
         }
@@ -53,7 +46,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
 
         if (isFull() && parent != null) {
-            System.out.println("split");
             IRTreeNode[] newNodes = this.split();
 
             parent.getChildren().remove(this.getId());
@@ -63,7 +55,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
             parent.addLocally(newNodes[1]);
             parent.writeToDisk();
         } else {
-            // TODO es necesario solo acá?
             writeToDisk();
         }
     }
@@ -101,11 +92,9 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public void deleteFromDisk() {
-        System.out.println("delete node " + getId());
 
         try {
             File file = new File(RTree.DIR + "r" + id + ".node");
-            // file.delete();
             if (!file.delete()) throw new Exception("failed to delete file");
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,7 +106,9 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     public IRTreeNode readFromDisk(long id) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(RTree.DIR + "r" + id + ".node"));
-            return (AbstractRTreeNode) (in.readObject());
+            AbstractRTreeNode node = (AbstractRTreeNode) (in.readObject());
+            in.close();
+            return node;
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
@@ -227,17 +218,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public ArrayList<MBR> getData() {
         return data;
-    }
-
-    @Override
-    public IRTreeNode getParent() {
-        return readFromDisk(parent);
-    }
-
-    @Override
-    public void setParent(long parent) {
-        this.parent = parent;
-        writeToDisk();
     }
 
     @Override

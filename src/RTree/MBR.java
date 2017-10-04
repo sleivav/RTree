@@ -61,6 +61,15 @@ class MBR implements Serializable {
 
     @Override
     public String toString() {
-        return "p1: (" + left + ", " + bottom + ") p2: (" + right + ", " + top + ")";
+        return "mbr(" + left + ", " + bottom + "):(" + right + ", " + top + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() == MBR.class) {
+            MBR o = (MBR) obj;
+            return o.left == left && o.right == right && o.bottom == bottom && o.top == top;
+        }
+        return false;
     }
 }

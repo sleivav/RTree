@@ -18,6 +18,8 @@ class GreenesRTree extends RTree {
             }
         }
         System.out.println("insertions ended.");
+        System.out.println(" took " + (System.currentTimeMillis() - t0) / 1000 + " seconds");
+        t0 = System.currentTimeMillis();
 
         // busquedas
         for (int i = 0; i < rekts / 10; i++) {
@@ -29,7 +31,7 @@ class GreenesRTree extends RTree {
         }
         System.out.println("searches ended.");
 
-        System.out.println((System.currentTimeMillis() - t0) / 1000 + " seconds");
+        System.out.println(" took " + (System.currentTimeMillis() - t0) / 1000 + " seconds");
         System.out.println(tree.blockUsage() + "% block usage");
     }
 
