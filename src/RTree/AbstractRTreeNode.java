@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private MBR rectangle;
-    Long parent; // TODO devolver private
+    private Long parent;
     private ArrayList<Long> children;
     private Long id;
     private final int min = 0;
@@ -179,12 +179,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public ArrayList<Long> getChildren() {
         return children;
-    }
-
-    @Override
-    public void setChildren(ArrayList<Long> children) {
-        // TODO update MBR
-        this.children = children;
     }
 
     @Override

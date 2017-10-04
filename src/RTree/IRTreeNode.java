@@ -25,8 +25,6 @@ public interface IRTreeNode {
     boolean isMinimal();
 
     public ArrayList<Long> getChildren();
-    public void setChildren(ArrayList<Long> children);
-
     public IRTreeNode getParent();
     public void setParent(Long parent);
 
