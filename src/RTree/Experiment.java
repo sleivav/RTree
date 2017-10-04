@@ -1,7 +1,5 @@
 package RTree;
 
-import RTree.MBR;
-
 import java.util.Random;
 
 public class Experiment {

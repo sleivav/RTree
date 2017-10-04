@@ -3,13 +3,13 @@ package RTree;
 
 import java.util.ArrayList;
 
-public class GreenesSplitRTreeNode extends AbstractRTreeNode {
+class GreenesSplitRTreeNode extends AbstractRTreeNode {
 
-    public GreenesSplitRTreeNode() {
+    GreenesSplitRTreeNode() {
         super();
     }
 
-    public GreenesSplitRTreeNode(MBR rekt) {
+    GreenesSplitRTreeNode(MBR rekt) {
         super(rekt);
     }
 

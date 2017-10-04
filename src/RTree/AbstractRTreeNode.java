@@ -11,14 +11,14 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     private final int max = 8;
     private final int min = (int) (0.4 * max);
 
-    public AbstractRTreeNode() {
+    AbstractRTreeNode() {
         this.id = IdGenerator.nextId();
         this.parent = -1;
-        this.children = new ArrayList<Long>(max);
+        this.children = new ArrayList<>(max);
         this.rectangle = null;
     }
 
-    public AbstractRTreeNode(MBR rectangle) {
+    AbstractRTreeNode(MBR rectangle) {
         this.id = IdGenerator.nextId();
         this.parent = -1;
         this.children = null;
@@ -62,7 +62,7 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public ArrayList<MBR> search(MBR rekt) {
-        ArrayList<MBR> res = new ArrayList<MBR>();
+        ArrayList<MBR> res = new ArrayList<>();
         if (isLeaf()) {
             if (getRectangle().intersecc(rekt)) {
                 res.add(getRectangle());
@@ -187,11 +187,6 @@ abstract class AbstractRTreeNode implements IRTreeNode, Serializable {
     @Override
     public boolean isLeaf() {
         return children == null;
-    }
-
-    @Override
-    public boolean isMinimal() {
-        return size() > min;
     }
 
     @Override

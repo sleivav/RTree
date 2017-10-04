@@ -2,18 +2,18 @@ package RTree;
 
 import java.io.*;
 
-public class IdGenerator {
+class IdGenerator {
 
-    public static final File FILE = new File(RTree.DIR + "id");
+    private static final File FILE = new File(RTree.DIR + "id");
 
-    public static Long nextId() {
+    static Long nextId() {
         try {
             Long res;
             if (FILE.exists()) {
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE));
                 res = in.readLong();
             } else {
-                res = Long.valueOf(0);
+                res = 0L;
             }
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE));
             out.writeLong(res + 1);
@@ -22,7 +22,7 @@ public class IdGenerator {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
-            return Long.valueOf(0);
+            return 0L;
         }
     }
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public abstract class RTree implements IRTree {
-    public static String DIR = RTree.class.getProtectionDomain().getCodeSource().getLocation().getFile()
+    static String DIR = RTree.class.getProtectionDomain().getCodeSource().getLocation().getFile()
             + File.separator;
 
     IRTreeNode root;
@@ -35,11 +35,9 @@ public abstract class RTree implements IRTree {
         return root.search(rectangle);
     }
 
-    public float blockUsage() {
+    float blockUsage() {
         return root.spaceUsed() / root.nodes() / 512.0f;
     }
 
     abstract public IRTreeNode newNode();
-
-
 }

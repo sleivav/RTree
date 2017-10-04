@@ -1,38 +1,29 @@
 package RTree;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
-public class MBR implements Serializable {
+class MBR implements Serializable {
     private float left, bottom, right, top;
 
-    public MBR(float left, float bottom, float right, float top) {
+    MBR(float left, float bottom, float right, float top) {
         this.left = left;
         this.bottom = bottom;
         this.right = right;
         this.top = top;
     }
 
-    public MBR(ArrayList<IRTreeNode> nodes) {
-        left = Float.MAX_VALUE;
-        right = Float.MIN_VALUE;
-        bottom = Float.MAX_VALUE;
-        top = Float.MIN_VALUE;
-        nodes.forEach(this::update);
-    }
-
-    public MBR copy() {
+    MBR copy() {
         return new MBR(left, bottom, right, top);
     }
 
-    public void update(IRTreeNode node) {
+    void update(IRTreeNode node) {
         left = Math.min(left, node.getRectangle().left);
         right = Math.max(right, node.getRectangle().right);
         bottom = Math.min(bottom, node.getRectangle().bottom);
         top = Math.max(top, node.getRectangle().top);
     }
 
-    public float calcChange(IRTreeNode node) {
+    float calcChange(IRTreeNode node) {
         float newLeft = Math.min(left, node.getRectangle().left);
         float newRight = Math.max(right, node.getRectangle().right);
         float newBottom = Math.min(bottom, node.getRectangle().bottom);
@@ -42,29 +33,29 @@ public class MBR implements Serializable {
         return newArea - area();
     }
 
-    public float area() {
+    float area() {
         return (right - left) * (top - bottom);
     }
 
-    public boolean intersecc(MBR rect) {
+    boolean intersecc(MBR rect) {
         boolean interX = (left <= rect.left && rect.left <= right) || (left <= rect.right && rect.right <= right);
         boolean interY = (bottom <= rect.bottom && rect.bottom <= top) || (bottom <= rect.top && rect.top <= top);
         return interX && interY;
     }
 
-    public float getLeft() {
+    float getLeft() {
         return left;
     }
 
-    public float getRight() {
+    float getRight() {
         return right;
     }
 
-    public float getBottom() {
+    float getBottom() {
         return bottom;
     }
 
-    public float getTop() {
+    float getTop() {
         return top;
     }
 

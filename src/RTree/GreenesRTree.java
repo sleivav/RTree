@@ -19,7 +19,7 @@ class GreenesRTree extends RTree {
             IRTreeNode node = new GreenesSplitRTreeNode(Experiment.getRekt());
             node.writeToDisk();
             tree.add(node.getId());
-            if (i % (rekts / 20) == 0 && i > 0) {
+            if (i % (rekts / 5) == 0 && i > 0) {
                 System.out.println(i + " insertions done...");
             }
         }
@@ -29,7 +29,7 @@ class GreenesRTree extends RTree {
         for (int i = 0; i < rekts / 10; i++) {
             MBR rekt = Experiment.getRekt();
             tree.search(rekt);
-            if (i % (rekts / 200) == 0 && i > 0) {
+            if (i % (rekts / 50) == 0 && i > 0) {
                 System.out.println(i + " searches done...");
             }
         }

@@ -2,7 +2,7 @@ package RTree;
 
 import java.util.ArrayList;
 
-public interface IRTreeNode {
+interface IRTreeNode {
     void add(long id);
     void addLocally(IRTreeNode node);
     IRTreeNode[] split();
@@ -25,7 +25,6 @@ public interface IRTreeNode {
     int size();
     boolean isFull();
     boolean isLeaf();
-    boolean isMinimal();
 
     ArrayList<Long> getChildren();
     IRTreeNode getParent();
