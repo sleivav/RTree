@@ -112,6 +112,9 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
                 rektA.update(dataRec);
             }
         }
+        initialNodeA.writeToDisk();
+        initialNodeA.writeToDisk();
+        this.deleteFromDisk();
         return new IRTreeNode[]{initialNodeA, initialNodeB};
     }
 
@@ -213,6 +216,9 @@ public class LinearSplitRTreeNode extends AbstractRTreeNode {
                 rektA.update(dataRec);
             }
         }
+        initialNodeA.writeToDisk();
+        initialNodeA.writeToDisk();
+        this.deleteFromDisk();
         return new IRTreeNode[]{initialNodeA, initialNodeB};
     }
 }
