@@ -51,7 +51,7 @@ class LinearRTree extends RTree {
 
         System.out.println(tree.blockUsage() + "% block usage\n");
         Logger.log("Linear Tree", rekts, insertion_time, search_time, insertion_reads, insertion_writes,
-                   tree.root.getReads(), tree.root.getWrites(), tree.blockUsage());
+                   tree.root.getReads(), tree.root.spaceUsed(), tree.blockUsage());
     }
 
     private LinearRTree(IRTreeNode node1, IRTreeNode node2) {

@@ -46,7 +46,7 @@ class GreenesRTree extends RTree {
 
         System.out.println(tree.blockUsage() + "% block usage\n");
         Logger.log("Greenes Tree", rekts, insertion_time, search_time, insertion_reads, insertion_writes,
-                tree.root.getReads(), tree.root.getWrites(), tree.blockUsage());
+                tree.root.getReads(), tree.root.spaceUsed(), tree.blockUsage());
     }
 
     private GreenesRTree(MBR rekt1, MBR rekt2) {

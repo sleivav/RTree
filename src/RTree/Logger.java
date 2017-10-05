@@ -24,15 +24,15 @@ public class Logger {
         }
     }
 
-    public static void log(String tree, int rekts, double insertion_time, double search_time, int insertion_reads,
-                           int insertion_writes, int search_reads, int search_writes, float v) {
+    public static void log(String tree, int rekts, double insertionTime, double searchTime, int insertionReads,
+                           int insertionWrites, int searchReads, long spaceUsed, float v) {
         String s = tree + ": " + System.lineSeparator() + "\t" + "Se insertaron: " + rekts + " rectangulos" +
-                System.lineSeparator() + "\t" + "Tiempo de inserción: " + insertion_time + " segundos" +
-                System.lineSeparator() + "\t" + "Tiempo de búsqueda: " + search_time + " segundos" +
-                System.lineSeparator() + "\t" + "Lecturas a disco durante insertion: " + insertion_reads +
-                System.lineSeparator() + "\t" + "Escrituras a disco durante insertion: " + insertion_writes +
-                System.lineSeparator() + "\t" + "Lecturas a disco durante search: " + search_reads +
-                System.lineSeparator() + "\t" + "Escrituras a disco durante search: " + search_writes +
+                System.lineSeparator() + "\t" + "Tiempo de inserción: " + insertionTime + " segundos" +
+                System.lineSeparator() + "\t" + "Tiempo de búsqueda: " + searchTime + " segundos" +
+                System.lineSeparator() + "\t" + "Lecturas a disco durante insertion: " + insertionReads +
+                System.lineSeparator() + "\t" + "Escrituras a disco durante insertion: " + insertionWrites +
+                System.lineSeparator() + "\t" + "Lecturas a disco durante search: " + searchReads +
+                System.lineSeparator() + "\t" + "Espacio en disco ocupado: " + spaceUsed + " bytes" +
                 System.lineSeparator() + "\t" + "Uso por bloque: " + v + "%" + System.lineSeparator() + System.lineSeparator();
         log(s);
     }
