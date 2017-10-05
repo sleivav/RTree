@@ -10,7 +10,7 @@ public abstract class RTree implements IRTree {
     IRTreeNode root;
 
     public RTree() {
-        root = newNode();
+        root = newNode(true);
         root.writeToDisk();
     }
 
@@ -20,7 +20,7 @@ public abstract class RTree implements IRTree {
         // root = root.readFromDisk(root.getId());
 
         if (root.isFull()) {
-            IRTreeNode parent = newNode();
+            IRTreeNode parent = newNode(false);
 
             IRTreeNode[] newNodes = root.split();
             parent.addLocally(newNodes[0]);
@@ -36,8 +36,8 @@ public abstract class RTree implements IRTree {
     }
 
     float blockUsage() {
-        return root.spaceUsed() / 4096.0f / root.nodes();
+        return root.spaceUsed() / 40.96f / root.nodes();
     }
 
-    abstract public IRTreeNode newNode();
+    abstract public IRTreeNode newNode(boolean isLeaf);
 }

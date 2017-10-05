@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class LinearNode extends RTreeNode {
-    LinearNode() {
-        super();
+    LinearNode(boolean isLeaf) {
+        super(isLeaf);
     }
 
     LinearNode(MBR rekt) {
@@ -76,8 +76,8 @@ public class LinearNode extends RTreeNode {
 
         IRTreeNode initialNodeA;
         IRTreeNode initialNodeB;
-        initialNodeA = new LinearNode();
-        initialNodeB = new LinearNode();
+        initialNodeA = new LinearNode(false);
+        initialNodeB = new LinearNode(false);
         int lowIndex;
         int highIndex;
         if (normalizedX >= normalizedY) {

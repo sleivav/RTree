@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 class GreenesNode extends RTreeNode {
 
-    GreenesNode() {
-        super();
+    GreenesNode(boolean isLeaf) {
+        super(isLeaf);
     }
 
     GreenesNode(MBR rekt) {
@@ -27,8 +27,8 @@ class GreenesNode extends RTreeNode {
         }
 
         ArrayList<Long> children = bubblesort(dimension, nodes);
-        IRTreeNode node1 = new GreenesNode();
-        IRTreeNode node2 = new GreenesNode();
+        IRTreeNode node1 = new GreenesNode(false);
+        IRTreeNode node2 = new GreenesNode(false);
 
         int mid = children.size() / 2;
         for (int i = 0; i < mid; i++) {

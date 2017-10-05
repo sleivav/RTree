@@ -14,18 +14,21 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
     private static int reads = 0;
     private static int writes = 0;
 
-    RTreeNode() {
+    RTreeNode(boolean isLeaf) {
         id = IdGenerator.nextId();
-        children = new ArrayList<>(max);
         rectangle = null;
-
         data = new ArrayList<>(max);
+
+        if (isLeaf)
+            children = null;
+        else
+            children = new ArrayList<>(max);
     }
 
     RTreeNode(MBR rectangle) {
         id = IdGenerator.nextId();
-        children = null;
         this.rectangle = rectangle.copy();
+        children = null;
 
         data = new ArrayList<>(max);
         data.add(rectangle);
