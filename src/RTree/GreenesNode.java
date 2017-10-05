@@ -9,7 +9,7 @@ class GreenesNode extends RTreeNode {
         super(isLeaf);
     }
 
-    GreenesNode(MBR rekt) {
+    private GreenesNode(MBR rekt) {
         super(rekt);
     }
 

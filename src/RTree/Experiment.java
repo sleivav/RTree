@@ -7,12 +7,14 @@ public class Experiment {
     private static Random rand = new Random();
 
     public static void main(String[] args) {
+        int n = 10;
         long t = System.currentTimeMillis();
-
-        experiment(new LinearRTree(), 1000, t);
+        experiment(new LinearRTree(), n, t);
+        experiment(new GreenesRTree(), n, t);
     }
 
-    private static void experiment(RTree tree, int rekts, long seed) {
+    private static void experiment(RTree tree, int n, long seed) {
+	int rekts = (int) Math.pow(2, n);
         String className = tree.getClass().getSimpleName();
         System.out.println("Launching experiment for " + className + " with n = " + rekts);
 
@@ -66,21 +68,5 @@ public class Experiment {
 
     private static void reset(long seed) {
         rand = new Random(seed);
-    }
-
-    static int getM() {
-        GreenesNode node = new GreenesNode(true);
-        int m = 0;
-
-        for (int i = 0; i < 200; i++) {
-            node.getData().add(getRekt());
-            node.getChildren().add(rand.nextLong());
-            node.writeToDisk();
-
-            File f = new File(RTree.DIR + "r" + node.getId() + ".node");
-            if (f.length() > 4096) break;
-            m = i;
-        }
-        return m;
     }
 }

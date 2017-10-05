@@ -10,30 +10,25 @@ import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 
-public class Logger {
+class Logger {
 
-    public static void log(String s) {
+    static private void log(String s) {
         byte data[] = s.getBytes();
-        Path p = Paths.get("./logfile.txt");
+        Path p = Paths.get("./logfile.csv");
 
         try (OutputStream out = new BufferedOutputStream(
                 Files.newOutputStream(p, CREATE, APPEND))) {
             out.write(data, 0, data.length);
         } catch (IOException x) {
-            System.err.println(x);
+            System.err.println(x.toString());
         }
     }
 
-    public static void log(String tree, int rekts, double insertionTime, double searchTime, int insertionReads,
-                           int insertionWrites, int searchReads, long spaceUsed, float v) {
-        String s = tree + ": " + System.lineSeparator() + "\t" + "Se insertaron: " + rekts + " rectangulos" +
-                System.lineSeparator() + "\t" + "Tiempo de inserción: " + insertionTime + " segundos" +
-                System.lineSeparator() + "\t" + "Tiempo de búsqueda: " + searchTime + " segundos" +
-                System.lineSeparator() + "\t" + "Lecturas a disco durante insertion: " + insertionReads +
-                System.lineSeparator() + "\t" + "Escrituras a disco durante insertion: " + insertionWrites +
-                System.lineSeparator() + "\t" + "Lecturas a disco durante search: " + searchReads +
-                System.lineSeparator() + "\t" + "Espacio en disco ocupado: " + spaceUsed + " bytes" +
-                System.lineSeparator() + "\t" + "Uso por bloque: " + v + "%" + System.lineSeparator() + System.lineSeparator();
+    static void log(String tree, int rekts, double insertionTime, double searchTime, int insertionReads,
+                           int insertionWrites, int searchReads, long spaceUsed, float usage) {
+        String s = tree + ", " + rekts + ", " + insertionTime + ", " + searchTime + ", " +
+                insertionReads + ", " + insertionWrites + ", " + searchReads + ", " + spaceUsed + 
+		", " +  usage + System.lineSeparator();
         log(s);
     }
 }

@@ -3,12 +3,12 @@ package RTree;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LinearNode extends RTreeNode {
+class LinearNode extends RTreeNode {
     LinearNode(boolean isLeaf) {
         super(isLeaf);
     }
 
-    LinearNode(MBR rekt) {
+    private LinearNode(MBR rekt) {
         super(rekt);
     }
 
@@ -17,7 +17,8 @@ public class LinearNode extends RTreeNode {
         if(isLeaf()) {
             return splitLeaf();
         }
-        ArrayList<IRTreeNode> nodes = new ArrayList<IRTreeNode>();
+        ArrayList<IRTreeNode> nodes = new ArrayList<>();
+
         // Variables para determinar las separaciones
         float maxLeft = Float.MIN_VALUE;
         int maxLeftIndex = 0;
@@ -34,8 +35,14 @@ public class LinearNode extends RTreeNode {
         float maxRight = Float.MIN_VALUE;
         float maxTop = Float.MIN_VALUE;
 
-        for (int i = 0; i < size(); i++) {
+        int size = getChildren().size();
+        for (int i = 0; i < size; i++) {
+
+            if (getChildren().size() <= i)
+                break;
+
             nodes.add(this.getChild(i));
+
             MBR rekt = nodes.get(i).getRectangle();
             if (rekt.getLeft() > maxLeft) {
                 maxLeft = rekt.getLeft();
@@ -78,6 +85,7 @@ public class LinearNode extends RTreeNode {
         IRTreeNode initialNodeB;
         initialNodeA = new LinearNode(false);
         initialNodeB = new LinearNode(false);
+
         int lowIndex;
         int highIndex;
         if (normalizedX >= normalizedY) {
@@ -87,8 +95,10 @@ public class LinearNode extends RTreeNode {
             lowIndex = maxBottomIndex;
             highIndex = minTopIndex;
         }
+
         initialNodeA.addLocally(nodes.get(lowIndex));
         initialNodeB.addLocally(nodes.get(highIndex));
+
         nodes.remove(lowIndex);
         getData().remove(lowIndex);
         if (lowIndex < highIndex) {
@@ -118,8 +128,8 @@ public class LinearNode extends RTreeNode {
         return new IRTreeNode[]{initialNodeA, initialNodeB};
     }
 
-    public IRTreeNode[] splitLeaf() {
-        ArrayList<MBR> rectangles = new ArrayList<MBR>();
+    private IRTreeNode[] splitLeaf() {
+        ArrayList<MBR> rectangles = new ArrayList<>();
         // Variables para determinar las separaciones
         float maxLeft = Float.MIN_VALUE;
         int maxLeftIndex = 0;

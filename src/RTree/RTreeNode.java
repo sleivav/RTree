@@ -36,7 +36,11 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
 
     @Override
     public void add(MBR rekt, IRTreeNode parent) {
+
         if (!isLeaf()) {
+            if (size() != getChildren().size())
+                fix(); // bugfix
+
             int i = indexOf(rekt);
             data.get(i).update(rekt);
             getChild(i).add(rekt, this);
@@ -61,6 +65,14 @@ abstract class RTreeNode implements IRTreeNode, Serializable {
             parent.writeToDisk();
         } else {
             writeToDisk();
+        }
+    }
+
+
+    private void fix() {
+        data = new ArrayList<>(max);
+        for (int i = 0; i < children.size(); i++) {
+            data.add(getChild(i).getRectangle().copy());
         }
     }
 
