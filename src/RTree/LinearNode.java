@@ -104,7 +104,7 @@ public class LinearNode extends RTreeNode {
             IRTreeNode child = nodes.get(i);
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
-            MBR dataRec = getData().get(i);
+            MBR dataRec = nodes.get(i).getRectangle();
             if (rektA.calcChange(dataRec) > rektB.calcChange(dataRec)
                     || (nodes.size() - i < getMin() && initialNodeA.size() < getMin())) {
                 initialNodeB.addLocally(child);
@@ -203,7 +203,7 @@ public class LinearNode extends RTreeNode {
         for (int i = 0; i < rectangles.size(); i++) {
             MBR rektA = initialNodeA.getRectangle();
             MBR rektB = initialNodeB.getRectangle();
-            MBR dataRec = getData().get(i);
+            MBR dataRec = rectangles.get(i);
             if (rektA.calcChange(dataRec) > rektB.calcChange(dataRec)
                     || (rectangles.size() - i < getMin() && initialNodeA.size() < getMin())) {
                 initialNodeB.getData().add(dataRec);
